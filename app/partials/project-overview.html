@@ -1,0 +1,39 @@
+<p>This is the partial for project overview.</p>
+<div ng-controller="ProjectOverviewCtrl">
+  <ul>
+    <li ng-repeat="milestone in milestones">
+     <!--  <a href="{{project.urls.view | projectlink}}">{{project.name}}</a> -->
+     {{milestone.name}}:
+
+       <ul>
+	    <li ng-repeat="task in tasks | filter:milestone.id">
+	     <!--  <a href="{{project.urls.view | projectlink}}">{{project.name}}</a> -->
+	     {{task.name}}
+	      
+	    </li>
+
+        </ul>   
+      </li>
+
+
+
+
+
+      
+      <li>NONE:
+
+       <ul>
+	    <li ng-repeat="task in tasks | filter:{milestone.id:'0'}">
+	     <!--  <a href="{{project.urls.view | projectlink}}">{{project.name}}</a> -->
+	     {{task.name}}
+	      
+	    </li>
+
+        </ul>  
+    </li>
+  </ul>    
+
+
+  Project: {{project}} 
+</div>
+​

@@ -1,0 +1,42 @@
+
+<p>This is the partial for project list.</p>
+
+<div ng-controller="ProjectListCtrl">
+Search: <input ng-model="query">
+<!-- 
+Completed:
+<select ng-model="compProp">
+  <option value="comp-0">No</option>
+  <option value="comp-1">Yes</option>
+</select>
+
+Archived:
+<select ng-model="archProp">
+  <option value="arch-0">No</option>
+  <option value="arch-1">Yes</option>
+</select>
+ -->
+<!-- Category:
+<select ng-model="categoryFilter.category.name">
+  <option ng-repeat="category in projectcategories">{{category.name}}</option>
+</select> -->
+<!-- 
+Label:
+<select ng-model="labelProp">
+  <option ng-repeat="label in projectlabels">{{label.name}}</option>
+</select>
+ -->
+<!-- Sort by:
+<select ng-model="orderProp">
+  <option value="name">Alphabetical</option>
+  <option value="is_favorite">Favorite</option>
+</select> -->
+
+  <ul>
+    <li ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0'} | orderBy:orderProp">
+     <a href="{{project.urls.view | projectoverviewlink}}">{{project.name}}</a> 
+    </li>
+  </ul>  
+  Debug: {{states}}
+</div>
+​

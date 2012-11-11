@@ -3,46 +3,48 @@
 /* Controllers */
 
 
-function ProjectListCtrl($scope, Collab, Auth, $location) 
+function ProjectListCtrl($scope, Projects, Auth, $location) 
 {
-  $scope.projects = Collab.query({path: 'projects', key: Auth.api_key});
+  var projects = Projects.query();
+
+  $scope.projects = projects;
   $scope.orderProp = 'name';
 }
-ProjectListCtrl.$inject = ['$scope', 'Collab', 'Auth', '$location'];
+ProjectListCtrl.$inject = ['$scope', 'Projects', 'Auth', '$location'];
 
 
-function ProjectDetailCtrl($scope, $routeParams, Collab) 
+function ProjectDetailCtrl($scope, $routeParams, Project, Auth) 
 {
-  $scope.project = Collab.get({path: 'projects/' + $routeParams.projectSlug});
+  $scope.project = Project.get({projectSlug: $routeParams.projectSlug});
 }
-ProjectDetailCtrl.$inject = ['$scope', '$routeParams', 'Collab'];
+ProjectDetailCtrl.$inject = ['$scope', '$routeParams', 'Project', 'Auth'];
 
 
-function ProjectOverviewCtrl($scope, $routeParams, Collab) 
+function ProjectOverviewCtrl($scope, $routeParams, Project, Task, Auth) 
 {
-  $scope.project = Collab.get({path: 'projects/' + $routeParams.projectSlug});
-  $scope.milestones = Collab.query({path: 'projects/' + $routeParams.projectSlug + '/milestones'});
-  $scope.tasks = Collab.query({path: 'projects/' + $routeParams.projectSlug + '/tasks'});
+  $scope.project = Project.get({projectSlug: $routeParams.projectSlug});
+  //$scope.milestones = Project.query({path: 'projects/' + $routeParams.projectSlug + '/milestones', key: Auth.api_key});
+  $scope.tasks = Tasks.query({projectSlug: $routeParams.projectSlug});
 }
-ProjectDetailCtrl.$inject = ['$scope', '$routeParams', 'Collab'];
+ProjectDetailCtrl.$inject = ['$scope', '$routeParams', 'Project', 'Task', 'Auth'];
 
 
 
 
 
-function TaskListCtrl($scope, $routeParams, Collab) 
+function TaskListCtrl($scope, $routeParams, Tasks, Auth) 
 {
-  $scope.tasks = Collab.query({path: 'projects/' + $routeParams.projectSlug + '/tasks'});
+  $scope.tasks = Tasks.query({projectSlug: $routeParams.projectSlug});
   $scope.orderProp = 'name';
 }
-TaskListCtrl.$inject = ['$scope', '$routeParams', 'Collab'];
+TaskListCtrl.$inject = ['$scope', '$routeParams', 'Tasks', 'Auth'];
 
 
-function TaskDetailCtrl($scope, $routeParams, Collab) 
+function TaskDetailCtrl($scope, $routeParams, Task, Auth) 
 {
-  $scope.task = Collab.get({path: 'projects/' + $routeParams.projectSlug + '/tasks/' + $routeParams.taskId});
+  $scope.task = Task.get({projectSlug: $routeParams.projectSlug, taskId: $routeParams.taskId});
 }
-TaskDetailCtrl.$inject = ['$scope', '$routeParams', 'Collab'];
+TaskDetailCtrl.$inject = ['$scope', '$routeParams', 'Task', 'Auth'];
 
 
 

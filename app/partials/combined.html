@@ -1,0 +1,19 @@
+<div ng-controller="ProjectListCtrl">
+Search: <input ng-model="query">
+  <h1>Projects</h1>
+  <ul>
+    <li ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0'} | orderBy:orderProp">
+     {{project.name}} - {{project.slug}}
+    </li>
+  </ul>  
+  <hr />
+  Debug: {{states}}
+</div>
+<div ng-controller="TaskListCtrl">
+  <h1>Tasks</h1>
+  <ul>
+    <li ng-repeat="task in tasks">
+     {{task.name}}
+    </li>
+  </ul> 
+</div>

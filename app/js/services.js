@@ -8,11 +8,66 @@
 //angular.module('myApp.services', []).
  // value('version', '0.1');
 
+var acServices = angular.module('acServices', ['ngResource']);
 
-angular.module('acServices', ['ngResource']).
-  factory('Collab', function($resource) { 
-    return $resource(localStorage.api_url + '?path_info=:path&format=json&auth_api_token=:key'); }).
-  value('version', '0.1');
+acServices.factory('Projects', function($resource) { 
+    var data;
+    var resource = $resource(localStorage.api_url + '?path_info=projects&format=json&auth_api_token=' + localStorage.api_key); 
+
+    var projects = function() {
+        data = resource.query();
+        return data;
+    }
+
+    var processProjects = function() {
+        if (data.length> 0 && data[0].processed != true)
+        {
+          for (var i=0; i<data.length; i++)
+          {
+            var pieces = data[i].urls.view.split('/');
+            data[i].slug = pieces[pieces.length - 1];
+            data[i].processed = true;
+          }
+        }
+        return data;
+    }
+
+    
+    return {
+        query: function() {
+            if(data) {
+                // console.log("returning cached data");
+                return processProjects(data);
+            } else {
+                console.log("getting projects from server");
+                return projects(); 
+            }
+
+        }
+      };
+  });
+
+
+acServices.factory('Project', function($resource) { 
+    var resource = $resource(localStorage.api_url + '?path_info=projects/:projectSlug&format=json&auth_api_token=' + localStorage.api_key); 
+    return resource;
+  });
+
+
+acServices.factory('Tasks', function($resource) { 
+    var resource = $resource(localStorage.api_url + '?path_info=projects/:projectSlug/tasks&format=json&auth_api_token=' + localStorage.api_key); 
+    return resource;
+  });
+
+
+acServices.factory('Task', function($resource) { 
+    var resource = $resource(localStorage.api_url + '?path_info=projects/:projectSlug/tasks/:taskId&format=json&auth_api_token=' + localStorage.api_key); 
+    return resource;
+  });
+
+
+
+acServices.value('version', '0.1');
 
 
 var Auth = angular.module('Auth', []);

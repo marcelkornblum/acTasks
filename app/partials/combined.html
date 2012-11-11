@@ -3,7 +3,7 @@ Search: <input ng-model="query">
   <h1>Projects</h1>
   <ul>
     <li ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0'} | orderBy:orderProp">
-     {{project.name}} - {{project.slug}}
+     <a href="#/projects/{{project.slug}}">{{project.name}}</a>
     </li>
   </ul>  
   <hr />

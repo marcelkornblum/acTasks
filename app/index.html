@@ -1,19 +1,21 @@
 <!doctype html>
-<html lang="en" ng-app="acDesk">
+<html lang="en" ng-app="acTasks">
 <head>
   <meta charset="utf-8">
-  <title>My AngularJS App</title>
+  <title>ActiveCollab Tasker</title>
   <link rel="stylesheet" href="css/app.css"/>
 </head>
 <body>
+
   <ul class="menu">
     <li><a href="#/projects">Projects</a></li>
-    <li><a href="#/tasks">Tasks</a></li>
+    <li><a href="#/login">Login</a></li>
   </ul>
 
   <div ng-view></div>
 
-  <div>Angular seed app: v<span app-version></span></div>
+  <hr />
+  <div>ActiveCollab Tasker: v<span app-version></span></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>

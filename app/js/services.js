@@ -10,157 +10,114 @@
 
 var acServices = angular.module('acServices', ['ngResource']);
 
-acServices.factory('Projects', function($resource) { 
-  var data;
-  var resource = $resource(localStorage.api_url + '?path_info=projects&format=json&auth_api_token=' + localStorage.api_key); 
+function processAcList(Type) {
+  return function(response) {
+    var list = [];
+    angular.forEach(response.data, function(data) {
 
-  var results = function() {
-    if(!data) {
-      data = resource.query();
-    }
-    return processProjects();
-  }
-
-  var processProjects = function() {
-    if (data.length > 0 && data[0].processed != true)
-    {
-      for (var i=0; i<data.length; i++)
-      {
         //get slug
-        var pieces = data[i].permalink.split('/');
-        data[i].slug = pieces[pieces.length - 1];
+        var pieces = data.permalink.split('/');
+        data.slug = pieces[pieces.length - 1];
 
-        data[i].created_on = data[i].created_on ? data[i].created_on.formatted_date : null;
-        data[i].updated_on = data[i].updated_on ? data[i].updated_on.formatted_date : null;
+        data.created_on = data.created_on ? data.created_on.formatted_date : null;
+        data.updated_on = data.updated_on ? data.updated_on.formatted_date : null;
 
         //mark as processed
-        data[i].processed = true;
-        console.log(data[i]);
-      }
-    }
-    return data;
+        data.processed = true;
+        console.log(data);
+
+      list.push(new Type(data));
+    });
+    return list;
   }
+}
 
-  return {
-    query: function() {
-      return results(); 
-    }
-  };
-});
+function processDropdown(Type) {
+  return function(response) {
+    var list = [{"id":"", "name":"ALL"}];
+    angular.forEach(response.data, function(data) {
+      list.push(new Type(data));
+    });
+    return list;
+  }
+}
 
-
-acServices.factory('Project', function($resource) { 
+acServices.factory('Projects', function($http) {
   var data = Array();
-  var resource = $resource(localStorage.api_url + '?path_info=projects/:projectSlug&format=json&auth_api_token=' + localStorage.api_key); 
-  //return resource;
-
-  var results = function(obj) {
-    if(!data || !data[obj.projectSlug]) {
-      data[obj.projectSlug] = resource.query(obj);
+  var Projects = function(data) {
+      angular.copy(data, this);
+    };
+  Projects.query = function() {
+    if (!data['list']) {
+      data['list'] = $http.get(localStorage.api_url + '?path_info=projects&format=json&auth_api_token=' + localStorage.api_key).then(processAcList(Projects));
     }
-    return data[obj.projectSlug];
+    return data['list'];
   }
-
-  return {
-    get: function(obj) {
-      return results(obj); 
+  Projects.get = function(projectSlug) {
+    if(!data || !data[projectSlug]) {
+      data[projectSlug] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '&format=json&auth_api_token=' + localStorage.api_key);//.then(processProjects(Projects));
     }
-  };
-
+    return data[projectSlug];
+  }
+  // Put other business logic on Phone here
+  return Projects;
 });
 
 
-acServices.factory('Tasks', function($resource) { 
+
+acServices.factory('Tasks', function($http) { 
   var data = Array();
-  var resource = $resource(localStorage.api_url + '?path_info=projects/:projectSlug/tasks&format=json&auth_api_token=' + localStorage.api_key); 
-
-  var results = function(obj) {
-    if(!data || !data[obj.projectSlug]) {
-      data[obj.projectSlug] = resource.query(obj);
+  var Tasks = function(data) {
+      angular.copy(data, this);
+    };
+  Tasks.query = function(projectSlug) {
+    if (!data[projectSlug]) {
+      data[projectSlug] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks&format=json&auth_api_token=' + localStorage.api_key).then(processAcList(Tasks));
     }
-    console.log(obj.projectSlug);
-    return data[obj.projectSlug];
+    console.log(data[projectSlug]);
+    return data[projectSlug];
   }
-
-  return {
-    query: function(obj) {
-      return results(obj); 
+  Tasks.get = function(projectSlug, taskId) {
+    if(!data || !data[projectSlug + '-' + taskId]) {
+      data[projectSlug + '-' + taskId] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/' + taskId + '&format=json&auth_api_token=' + localStorage.api_key);//.then(processTasks(Tasks));
     }
-  };
+    return data[projectSlug + '-' + taskId];
+  }
+  // Put other business logic on Phone here
+  return Tasks;
 });
 
 
-acServices.factory('Task', function($resource) { 
-  var data = Array();
-  var resource = $resource(localStorage.api_url + '?path_info=projects/:projectSlug/tasks/:taskId&format=json&auth_api_token=' + localStorage.api_key); 
-
-  var results = function(obj) {
-    if(!data || !data[obj.projectSlug + '-' + obj.taskId]) {
-      data[obj.projectSlug + '-' + obj.taskId] = resource.query(obj);
-    }
-    return data[obj.projectSlug + '-' + obj.taskId];
-  }
-
-  return {
-    get: function(obj) {
-      return results(obj); 
-    }
-  };
-});
-
-
-acServices.factory('Labels', function($resource) { 
+acServices.factory('Labels', function($http) { 
   var data;
-  var resource = $resource(localStorage.api_url + '?path_info=info/labels/project&format=json&auth_api_token=' + localStorage.api_key); 
-
-  var results = function(obj) {
-    if(!data) {
-      data = resource.query(obj);
-    }
-    return processLabels();
-  }
-
-  var processLabels = function() {
-    if (data.length > 0 && data[0].name != 'ALL')
+  var Labels = function(data) {
+      angular.copy(data, this);
+    };
+  Labels.query = function() {
+    if (!data)
     {
-      data.unshift({"id":"", "name":"ALL"});
+      data = $http.get(localStorage.api_url + '?path_info=info/labels/project&format=json&auth_api_token=' + localStorage.api_key).then(processDropdown(Labels));
     }
     return data;
   }
-
-  return {
-    query: function(obj) {
-      return results(); 
-    }
-  };
+  return Labels;
 });
 
 
-acServices.factory('Categories', function($resource) { 
+acServices.factory('Categories', function($http) { 
   var data;
-  var resource = $resource(localStorage.api_url + '?path_info=projects/categories&format=json&auth_api_token=' + localStorage.api_key); 
-
-  var results = function() {
-    if(!data) {
-      data = resource.query();
-    }
-    return processCategories();
-  }
-
-  var processCategories = function() {
-    if (data.length > 0 && data[0].name != 'ALL')
+  var Categories = function(data) {
+      angular.copy(data, this);
+    };
+  Categories.query = function() {
+    if (!data)
     {
-      data.unshift({"id":"", "name":"ALL"});
+      data = $http.get(localStorage.api_url + '?path_info=projects/categories&format=json&auth_api_token=' + localStorage.api_key).then(processDropdown(Categories));
     }
     return data;
   }
-
-  return {
-    query: function() {
-      return results(); 
-    }
-  };
-});
+  return Categories;
+  });
 
 
 

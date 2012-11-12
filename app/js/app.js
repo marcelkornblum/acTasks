@@ -25,3 +25,19 @@ angular.module('acTasks', ['acServices', 'acFilters', 'acDirectives', 'Auth']).
   //   $rootScope.$on '$routeChangeStart', (event, next, current) ->
   //       if not User.isAuthenticated() and next.templateUrl isnt '/partials/login.html'
   //           $location.path("/login");
+/*
+function toggleHide(element)
+{
+  // alert ('called with ' + element);
+  var domElement = document.getElementById(element);
+  // alert ('found ' + domElement + ' with display = ' + domElement.style.display);
+  domElement.style.display = domElement.style.display === 'none' ? 'block' : 'none';
+  // alert ('and made display = ' + domElement.style.display);
+  return false;
+}
+
+function init(){
+    document.getElementById('projectFilterButton').onclick=function(){toggleHide('projectFilters');};
+}
+window.onload=init;
+*/

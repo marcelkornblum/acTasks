@@ -6,19 +6,24 @@
   <link rel="stylesheet" href="css/app.css"/>
 </head>
 <body>
-
-  <ul class="menu">
-    <li><a href="#/combined">Combined</a></li>
-    <li><a href="#/projects">Projects</a></li>
+<!-- <header id="site-header">
+  <h1><a href="/">Stink Digital Admin System</a></h1>
+  <p class="release">&beta; 0.3.5</p>
+</header> -->
+<div id="container">
+<div id="navigation">
+  <h2>Navigation</h2>
+  <ul class="site-nav">
+    <li><a href="#/logout">Logout</a></li>
     <li><a href="#/login">Login</a></li>
-  </ul>
+</ul></div>
 
-  <div class="container">
-    <div ng-view></div>
-  </div>
 
-  <hr />
-  <div>ActiveCollab Tasker: v<span app-version></span></div>
+<ng-view />
+
+</div>
+<hr />
+<div>ActiveCollab Tasker: v<span app-version></span></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>

@@ -1,40 +1,313 @@
-/* app css stylesheet */
+/* _________________________________________________
 
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+Bits borrowed from 320 and Up boilerplate extension
+
+Author:Andy Clarke
+Version:0.9b
+URL:http://stuffandnonsense.co.uk/projects/320andup/
+_____________________________________________________
+
+1.ROOT
+2.HEADINGS
+3.TYPOGRAPHY
+4.LINKS
+5.FIGURES & IMAGES
+6.TABLES
+7.FORMS (See css/mylibs/forms.css)
+8.BANNER header[role="banner"]
+9.NAVIGATION nav[role="navigation"]
+10.CONTENT
+11.MAIN div[role="main"]
+12.COMPLIMENTARY div[role="complementary"]
+13.CONTENTINFO footer[role="contentinfo"]
+14.GLOBAL OBJECTS
+15.VENDOR-SPECIFIC 
+16.TEMPLATE SPECIFICS
+17.MODERNIZR
+
+*/
+
+
+/* 0.RESET */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video { margin :0; padding :0; border :0; font-size :100%; font :inherit; vertical-align :baseline; }
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section { display :block; }
+abbr[title] { border-bottom :1px dotted; cursor :help; }
+
+
+/* 1.ROOT */
+html { overflow-y:scroll; background:rgb(255,255,255); }
+body { margin:0 auto; width:90%; max-width:1296px; font:100%/1.4 "Helvetica Neue", Helvetica, Arial; color:rgb(40,40,40); background-color:transparent; }
+
+
+/* 2.HEADINGS */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 { font-family:"Helvetica Neue", Helvetica, Arial; }
+
+h1 { margin-bottom:.75em; nowhitespace:afterproperty; font-size:3em; /* 48 / 16 = 3 */ line-height:1.2; }
+h2 { margin-bottom:.75em; nowhitespace:afterproperty; font-size:1.4em; /* 36 / 16 = 2 */ line-height:1.2; text-transform:uppercase; }
+h3 { margin-bottom:1em; nowhitespace:afterproperty; font-size:1.5em; /* 16 / 16 = 1 */ line-height:1.3; }
+h4 { margin-bottom:1.25em; nowhitespace:afterproperty; font-size:1.25em; /* 20 / 16 = 1.25 */ line-height:1.25; }
+h5 { margin-bottom:1.5em; nowhitespace:afterproperty; font-size:1em; /* 16 / 16 = 1 */ }
+h6 { font-size:1em; /* 16 / 16 = 1 */ }
+
+h2 a    { border-bottom:2px solid #ccc; text-decoration:none; }
+h2 a:hover  { border-color:rgb(230, 230, 230) !important; }
+
+
+/* 3.TYPOGRAPHY */
+p,
+ol,
+ul,
+address { margin-bottom:1.5em; font-size:0.875em; /* 16 / 16 = 1 */ }
+ul,
+ol { margin:0 0 1.5em -24px; padding-left:24px; }
+ul { list-style-type:disc }
+ol { list-style-type:decimal }
+li ul,
+li ol { margin:0; font-size:1em; /* 16 / 16 = 1 */ }
+dd { margin-bottom:1.5em }
+dt { font-weight:normal }
+blockquote { margin:0 0 1.5em -24px; padding-left:24px; border-left:1px solid rgb(200,200,200); font-style:italic; }
+blockquote:before,
+blockquote:after,
+q:before,
+q:after { content:''; content:none; }
+b,
+strong { font-weight:bold }
+i,
+em { font-style:italic }
+sup,
+sub { position:relative; font-size:75%; line-height:0; }
+sup { top:-.5em }
+sub { bottom:-.25em }
+address { font-style:normal }
+pre { margin-bottom:1.5em; white-space:pre; white-space:pre-wrap; word-wrap:break-word; }
+pre,
+code { font:.875em 'andale mono', 'lucida console', monospace; line-height:1.5; }
+small { font-size:1em; /* 16 / 16 = 1 */ }
+
+
+/* 4.LINKS */
+a,
+a:visited { outline:none; color:rgb(40, 40, 40); text-decoration:none; border-bottom:1px solid rgb(150, 150, 150); }
+a:hover { outline:none; color:rgb(40,40,40); text-decoration:none; border-color:rgb(0, 0, 0); }
+a:active,
+a:focus { outline:none; color:rgb(0,0,0); }
+
+/* 7.FORMS */
+#colour,
+#deadline,
+#start,
+#end,
+#joined             { outline:none; }
+
+textarea            { width:300px; height:100px; }
+
+input[type=submit]        { padding:5px; -webkit-border-radius:0 !important; border:0; line-height:1; background:rgb(246, 17, 121); color:#fff; cursor:pointer; -webkit-appearance:none; }
+input[type=submit]:hover    { background:rgb(0, 0, 0); }
+
+dd label            { font-size:0.8em; }
+
+
+/* 8.BANNER */
+
+
+/* 9.NAVIGATION */
+#navigation           { margin:0 0 10px 0; padding:0 0 40px 0; border:1px solid #222; border-width:0 0 1px 0; position: relative; }
+#navigation h2          { display:none; }
+#navigation ul          { margin-bottom:0; }
+#navigation li          { margin-right:10px; list-style:none; display:inline-block; font-size:1em; float: right; }
+#navigation li a        { padding:10px 0; border:none; display:inline-block; text-decoration:none; }
+#navigation li a:hover      { color:rgb(150, 150, 150); }
+#navigation li.active a     { color:rgb(246, 17, 121); }
+/*
+
+.nav-container          { float:left; display:inline-block; position:relative; }
+.nav-container h2       { min-width:125px; margin-right:15px; float:left; }
+.nav-container h2 a.title   { text-transform:none; }
+.nav-container nav        { float:left; }
+.nav-container nav ul     { margin:0; padding:0; display:inline-block; }
+.nav-container nav ul.pagination{ border-left:1px solid rgb(240, 240, 240); padding-left:5px; }
+.nav-container nav li     { padding:0 10px; float:left; list-style:none; font-size:0.857em; line-height:2.2; }
+.nav-container nav a      { border-bottom:2px solid rgb(240, 240, 240); display:block; text-decoration:none; color:#333; }
+.nav-container nav a:hover    { border-color:rgb(246, 17, 121); }
+.nav-container nav a.selected { border-color:rgb(246, 17, 121); color:rgb(246, 17, 121); }
+
+ul.office , ul.user-nav     { position:absolute; top:0; right:0; margin-bottom:0; }
+#navigation ul.office li, 
+  #navigation ul.user-nav li  { margin:0; }
+ul.office li:last-child:before  { content:'| '; font-weight:normal; }
+
+ul.user-nav           { top:-40px; }
+ul.user-nav li          { padding-left:10px; }
+
+
+/* 10.CONTENT */
+
+
+/* 11.MAIN div[role="main"] */
+
+
+/* 12.COMPLIMENTARY div[role="complementary"] */
+
+
+/* 13.CONTENTINFO footer[role="contentinfo"] */
+
+
+/* 14.GLOBAL OBJECTS */
+/* CSS3 transitions */
+.page-header a.action,
+input[type=submit]              { -webkit-transition:background 250ms linear; }
+
+.nav-container nav a            { -webkit-transition:border-color 250ms linear; }
+
+a            { -webkit-transition:all 250ms linear; }
+
+/* Tables */
+
+/* 15.VENDOR-SPECIFIC */
+body { -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
+a:link { -webkit-tap-highlight-color:rgb(52,158,219) }
+::-webkit-selection { background:rgb(23,119,175); color:rgb(250,250,250); text-shadow:none; }
+::-moz-selection { background:rgb(23,119,175); color:rgb(250,250,250); text-shadow:none; }
+::selection { background:rgb(23,119,175); color:rgb(250,250,250); text-shadow:none; }
+::-webkit-input-placeholder { padding:10px; font-size:.875em; line-height:1.4; }
+input:-moz-placeholder { padding:10px; font-size:.875em; line-height:1.4; }
+.ie7 img,
+.iem7 img { -ms-interpolation-mode:bicubic }
+div,
+input,
+textarea { /* -webkit-box-sizing:border-box; -moz-box-sizing:border-box; -o-box-sizing:border-box; box-sizing:border-box; */ }
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
 }
 
-.menu:before {
-  content: "[";
+
+/* 16.TEMPLATE SPECIFICS */
+
+/*
+  jQuery UI CSS Framework 1.8.14 
+  To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Helvetica,Arial,sans-serif&fwDefault=normal&fsDefault=1.2em&cornerRadius=0px&bgColorHeader=000000&bgTextureHeader=01_flat.png&bgImgOpacityHeader=0&borderColorHeader=000000&fcHeader=ffffff&iconColorHeader=ffffff&bgColorContent=ffffff&bgTextureContent=01_flat.png&bgImgOpacityContent=75&borderColorContent=aaaaaa&fcContent=222222&iconColorContent=222222&bgColorDefault=ffffff&bgTextureDefault=02_glass.png&bgImgOpacityDefault=0&borderColorDefault=dcdcdc&fcDefault=555555&iconColorDefault=888888&bgColorHover=000000&bgTextureHover=02_glass.png&bgImgOpacityHover=0&borderColorHover=000000&fcHover=ffffff&iconColorHover=454545&bgColorActive=ffffff&bgTextureActive=02_glass.png&bgImgOpacityActive=0&borderColorActive=aaaaaa&fcActive=212121&iconColorActive=454545&bgColorHighlight=f61179&bgTextureHighlight=02_glass.png&bgImgOpacityHighlight=0&borderColorHighlight=f61179&fcHighlight=ffffff&iconColorHighlight=ffea2e&bgColorError=fef1ec&bgTextureError=05_inset_soft.png&bgImgOpacityError=95&borderColorError=cd0a0a&fcError=cd0a0a&iconColorError=cd0a0a&bgColorOverlay=aaaaaa&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=0&opacityOverlay=30&bgColorShadow=aaaaaa&bgTextureShadow=01_flat.png&bgImgOpacityShadow=0&opacityShadow=30&thicknessShadow=8px&offsetTopShadow=-8px&offsetLeftShadow=-8px&cornerRadiusShadow=8px
+*/
+
+
+/* 17.MODERNIZR */
+
+
+/* MEDIA QUERIES */
+/* Print */
+
+html, body {
+  height: 100%;
 }
 
-.menu:after {
-  content: "]";
-}
-
-.menu > li {
-  display: inline;
-}
-
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
-}
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
-}
-
-.container {
-  
+#container {
+  min-height: 100%; 
+  height: auto !important; /*Cause footer to stick to bottom in IE 6*/
+  height: 100%; 
 }
 
 .pane {
   float:left;
   display: block;
-  width: 45%;
 }
+
+.projects {
+  width: 20%;
+}
+
+.tasks {
+  width: 40%;
+}
+
+.details {
+  width: 40%;
+}
+
+.pane h2, .pane a.filter {
+  float:left;
+  border: none;
+}
+
+.pane h2 {
+  margin-bottom: 10px;
+}
+
+.pane a.filter {
+  font-size: 0.8em;
+  padding-left: 10px;
+  padding-top: 0.5em;
+}
+
+ul.list, ul.filter {
+  list-style: none;
+  clear: left;
+  margin: 0;
+  border:1px solid #222; border-width: 1px 0 0 0;
+  max-height: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+ul.list {
+  padding: 0.5em 0 ;
+}
+
+ul.filter {
+  display: none;
+  background-color: #ccc;
+  padding: 1.5em 0 ;
+}
+
+ul.list li, ul.filter li {
+  list-style: none;
+  display: block;
+  width: 100%;
+}
+
+ul.list li.selected a {
+  background-color: #333;
+  color: #fff;
+}
+
+ul.list li a {
+  padding: 5px 0 5px 5px;
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  border: none;
+}
+
+hr {
+  clear: both;
+}
+
+
+
+
+
+
+

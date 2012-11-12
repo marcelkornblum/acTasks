@@ -1,31 +1,37 @@
-
-
-  <div ng-controller="CombinedListCtrl">
-    <div class="pane">
-  Search: <input ng-model="query">
-  Category: <select ng-model="selectedCategory" ng-options="n.id as n.name for n in projectcategories"></select>
-  Label: <select ng-model="selectedLabel" ng-options="n.id as n.name for n in projectlabels"></select>
-
-    <h1>Projects</h1>
-    <p>selected: {{selectedproject.name}}</p>
-    <ul>
-      <li   ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0', label_id:selectedLabel, category_id:selectedCategory} | orderBy:orderProp">
+<div ng-controller="CombinedListCtrl">
+  <div class="pane projects">
+    <h2>Projects</h2><a href="" class="filter" id="projectFilterButton">[FILTER]</a>
+    <ul class="filter" id="projectFilters">
+      <li>Search: <input ng-model="query" /></li>
+      <li>Category: <select ng-model="selectedCategory" ng-options="n.id as n.name for n in projectcategories"></select></li>
+      <li>Label: <select ng-model="selectedLabel" ng-options="n.id as n.name for n in projectlabels"></select></li>
+    </ul>
+    
+    <ul class="list">
+      <li ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0', label_id:selectedLabel, category_id:selectedCategory} | orderBy:orderProp" ng-class="{selected: selectedProject==project}">
        <!-- <a href="#/projects/{{project.slug}}">{{project.name}}</a> -->
        <a ng:click="selectproject(project)">{{project.name}}</a>
       </li>
     </ul>  
-</div>
+  </div>
 
+  <div class="pane tasks">
+    <h2>Tasks</h2><a href="" class="filter" id="taskFilterButton">[FILTER]</a>
+    <ul class="filter" id="taskFilters">
+      <li>Search: <input ng-model="query" /></li>
+      <li>Category: <select ng-model="selectedCategory" ng-options="n.id as n.name for n in projectcategories"></select></li>
+      <li>Label: <select ng-model="selectedLabel" ng-options="n.id as n.name for n in projectlabels"></select></li>
+    </ul>
 
-<div class="pane">
-    <h1>Tasks</h1>
-    <ul>
-      <li ng-repeat="task in tasks">
-       {{task.name}}
+    <ul class="list">
+      <li ng-repeat="task in tasks" ng-class="{selected: selectedTask==task}">
+       <a ng:click="selecttask(task)">{{task.name}}</a>
       </li>
     </ul> 
-</div>v
-
-    <hr />
-    Debug: {{states}}
   </div>
+
+  <div class="pane details">
+    <h2>Details</h2>
+    {{task}}
+  </div>
+</div>

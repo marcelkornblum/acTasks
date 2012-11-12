@@ -68,8 +68,8 @@ function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, Auth, $lo
   $scope.tasks = Array();  
 
   $scope.orderProp = 'name';
-  $scope.selectedLabel = "";
-  $scope.selectedCategory = "";
+  $scope.selectedProjectLabel = "";
+  $scope.selectedProjectCategory = "";
 
   $scope.selectproject = function(project) {
     $scope.selectedProject = project;

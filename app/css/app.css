@@ -256,10 +256,16 @@ html, body {
   margin-bottom: 10px;
 }
 
-.pane a.filter {
-  font-size: 0.8em;
+.pane span.filter {
+  font-size: 0.9em;
   padding-left: 10px;
-  padding-top: 0.5em;
+  position: relative;
+  top: 0.3em;
+}
+
+.pane span.filter input {
+  position: relative;
+  bottom: 0.1em;
 }
 
 ul.list, ul.filter {
@@ -277,9 +283,9 @@ ul.list {
 }
 
 ul.filter {
-  display: none;
+ /* display: none;*/
   background-color: #ccc;
-  padding: 1.5em 0 ;
+  padding: 1.5em 5px ;
 }
 
 ul.list li, ul.filter li {
@@ -288,8 +294,18 @@ ul.list li, ul.filter li {
   width: 100%;
 }
 
+ul.filter li span {
+  display: inline-block;
+  width: 35%;
+}
+
 ul.list li.selected a {
   background-color: #333;
+  color: #fff;
+}
+
+ul.list li.over a {
+  background-color: #999;
   color: #fff;
 }
 

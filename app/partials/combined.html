@@ -1,14 +1,14 @@
 <div ng-controller="CombinedListCtrl">
   <div class="pane projects">
-    <h2>Projects</h2><a href="" class="filter" id="projectFilterButton">[FILTER]</a>
-    <ul class="filter" id="projectFilters">
-      <li>Search: <input ng-model="query" /></li>
-      <li>Category: <select ng-model="selectedCategory" ng-options="n.id as n.name for n in projectcategories"></select></li>
-      <li>Label: <select ng-model="selectedLabel" ng-options="n.id as n.name for n in projectlabels"></select></li>
+    <h2>Projects</h2><span class="filter">FILTER <input type="checkbox" ng-model="projectFilters"></span>
+    <ul class="filter" ng-show="projectFilters">
+      <li><span>Search:</span><input ng-model="Projectquery" /></li>
+      <li><span>Category:</span><select ng-model="selectedProjectCategory" ng-options="n.id as n.name for n in projectcategories"></select></li>
+      <li><span>Label:</span><select ng-model="selectedProjectLabel" ng-options="n.id as n.name for n in projectlabels"></select></li>
     </ul>
     
     <ul class="list">
-      <li ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0', label_id:selectedLabel, category_id:selectedCategory} | orderBy:orderProp" ng-class="{selected: selectedProject==project}">
+      <li ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0', label_id:selectedProjectLabel, category_id:selectedProjectCategory} | orderBy:orderProp" ng-class="{selected: selectedProject==project}" class="ng-mouseover: {over};">
        <!-- <a href="#/projects/{{project.slug}}">{{project.name}}</a> -->
        <a ng:click="selectproject(project)">{{project.name}}</a>
       </li>
@@ -16,11 +16,11 @@
   </div>
 
   <div class="pane tasks">
-    <h2>Tasks</h2><a href="" class="filter" id="taskFilterButton">[FILTER]</a>
-    <ul class="filter" id="taskFilters">
-      <li>Search: <input ng-model="query" /></li>
-      <li>Category: <select ng-model="selectedCategory" ng-options="n.id as n.name for n in projectcategories"></select></li>
-      <li>Label: <select ng-model="selectedLabel" ng-options="n.id as n.name for n in projectlabels"></select></li>
+    <h2>Tasks</h2><span class="filter">FILTER <input type="checkbox" ng-model="taskFilters"></span>
+    <ul class="filter" ng-show="taskFilters">
+      <li><span>Search:</span><input ng-model="query" /></li>
+      <li><span>Category:</span><select ng-model="selectedCategory" ng-options="n.id as n.name for n in projectcategories"></select></li>
+      <li><span>Label:</span><select ng-model="selectedLabel" ng-options="n.id as n.name for n in projectlabels"></select></li>
     </ul>
 
     <ul class="list">

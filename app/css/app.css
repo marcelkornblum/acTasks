@@ -28,3 +28,13 @@
   content: "";
   padding: 0;
 }
+
+.container {
+  
+}
+
+.pane {
+  float:left;
+  display: block;
+  width: 45%;
+}

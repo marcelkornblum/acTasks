@@ -16,16 +16,12 @@ Archived:
   <option value="arch-1">Yes</option>
 </select>
  -->
-<!-- Category:
-<select ng-model="categoryFilter.category.name">
-  <option ng-repeat="category in projectcategories">{{category.name}}</option>
-</select> -->
-<!-- 
+Category:
+<select ng-model="selectedCategory" ng-options="n.id as n.name for n in projectcategories"></select>
+
 Label:
-<select ng-model="labelProp">
-  <option ng-repeat="label in projectlabels">{{label.name}}</option>
-</select>
- -->
+<select ng-model="selectedLabel" ng-options="n.id as n.name for n in projectlabels"></select>
+
 <!-- Sort by:
 <select ng-model="orderProp">
   <option value="name">Alphabetical</option>
@@ -33,7 +29,7 @@ Label:
 </select> -->
 
   <ul>
-    <li ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0'} | orderBy:orderProp">
+    <li ng-repeat="project in projects | filter:query | filter:{label_id:selectedLabel, category_id:selectedCategory} | filter:{is_completed:'0', is_archived:'0'} | orderBy:orderProp">
      <a href="{{project.urls.view | projectoverviewlink}}">{{project.name}}</a> 
     </li>
   </ul>  

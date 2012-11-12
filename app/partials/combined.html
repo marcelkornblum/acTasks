@@ -1,19 +1,31 @@
-<div ng-controller="ProjectListCtrl">
-Search: <input ng-model="query">
-  <h1>Projects</h1>
-  <ul>
-    <li ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0'} | orderBy:orderProp">
-     <a href="#/projects/{{project.slug}}">{{project.name}}</a>
-    </li>
-  </ul>  
-  <hr />
-  Debug: {{states}}
+
+
+  <div ng-controller="CombinedListCtrl">
+    <div class="pane">
+  Search: <input ng-model="query">
+  Category: <select ng-model="selectedCategory" ng-options="n.id as n.name for n in projectcategories"></select>
+  Label: <select ng-model="selectedLabel" ng-options="n.id as n.name for n in projectlabels"></select>
+
+    <h1>Projects</h1>
+    <p>selected: {{selectedproject.name}}</p>
+    <ul>
+      <li   ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0', label_id:selectedLabel, category_id:selectedCategory} | orderBy:orderProp">
+       <!-- <a href="#/projects/{{project.slug}}">{{project.name}}</a> -->
+       <a ng:click="selectproject(project)">{{project.name}}</a>
+      </li>
+    </ul>  
 </div>
-<div ng-controller="TaskListCtrl">
-  <h1>Tasks</h1>
-  <ul>
-    <li ng-repeat="task in tasks">
-     {{task.name}}
-    </li>
-  </ul> 
-</div>
+
+
+<div class="pane">
+    <h1>Tasks</h1>
+    <ul>
+      <li ng-repeat="task in tasks">
+       {{task.name}}
+      </li>
+    </ul> 
+</div>v
+
+    <hr />
+    Debug: {{states}}
+  </div>

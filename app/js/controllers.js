@@ -3,14 +3,21 @@
 /* Controllers */
 
 
-function ProjectListCtrl($scope, Projects, Auth, $location) 
+function ProjectListCtrl($scope, Projects, Labels, Categories, Auth, $location) 
 {
-  var projects = Projects.query();
+  $scope.projects = Projects.query();
+  $scope.projectlabels = Labels.query();
+  $scope.projectcategories = Categories.query();
 
-  $scope.projects = projects;
   $scope.orderProp = 'name';
+  $scope.selectedLabel = "";
+  $scope.selectedCategory = "";
+
+  $scope.select = function(project) {
+    $scope.selected = project;
+  };
 }
-ProjectListCtrl.$inject = ['$scope', 'Projects', 'Auth', '$location'];
+ProjectListCtrl.$inject = ['$scope', 'Projects', 'Labels', 'Categories', 'Auth', '$location'];
 
 
 function ProjectDetailCtrl($scope, $routeParams, Project, Auth) 
@@ -20,13 +27,13 @@ function ProjectDetailCtrl($scope, $routeParams, Project, Auth)
 ProjectDetailCtrl.$inject = ['$scope', '$routeParams', 'Project', 'Auth'];
 
 
-function ProjectOverviewCtrl($scope, $routeParams, Project, Task, Auth) 
+function ProjectOverviewCtrl($scope, $routeParams, Project, Tasks, Auth) 
 {
   $scope.project = Project.get({projectSlug: $routeParams.projectSlug});
   //$scope.milestones = Project.query({path: 'projects/' + $routeParams.projectSlug + '/milestones', key: Auth.api_key});
   $scope.tasks = Tasks.query({projectSlug: $routeParams.projectSlug});
 }
-ProjectDetailCtrl.$inject = ['$scope', '$routeParams', 'Project', 'Task', 'Auth'];
+ProjectDetailCtrl.$inject = ['$scope', '$routeParams', 'Project', 'Tasks', 'Auth'];
 
 
 
@@ -45,6 +52,32 @@ function TaskDetailCtrl($scope, $routeParams, Task, Auth)
   $scope.task = Task.get({projectSlug: $routeParams.projectSlug, taskId: $routeParams.taskId});
 }
 TaskDetailCtrl.$inject = ['$scope', '$routeParams', 'Task', 'Auth'];
+
+
+
+
+
+
+
+
+function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, Auth, $location) 
+{
+  $scope.projects = Projects.query();
+  $scope.projectlabels = Labels.query();
+  $scope.projectcategories = Categories.query();
+  $scope.tasks = Array();  
+
+  $scope.orderProp = 'name';
+  $scope.selectedLabel = "";
+  $scope.selectedCategory = "";
+
+  $scope.selectproject = function(project) {
+    $scope.selectedproject = project;
+    console.log(project.slug);
+    $scope.tasks = Tasks.query({'projectSlug': project.slug});
+  };
+}
+CombinedListCtrl.$inject = ['$scope', 'Projects', 'Tasks', 'Labels', 'Categories', 'Auth', '$location'];
 
 
 

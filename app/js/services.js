@@ -26,9 +26,16 @@ acServices.factory('Projects', function($resource) {
     {
       for (var i=0; i<data.length; i++)
       {
-        var pieces = data[i].urls.view.split('/');
+        //get slug
+        var pieces = data[i].permalink.split('/');
         data[i].slug = pieces[pieces.length - 1];
+
+        data[i].created_on = data[i].created_on ? data[i].created_on.formatted_date : null;
+        data[i].updated_on = data[i].updated_on ? data[i].updated_on.formatted_date : null;
+
+        //mark as processed
         data[i].processed = true;
+        console.log(data[i]);
       }
     }
     return data;
@@ -48,7 +55,7 @@ acServices.factory('Project', function($resource) {
   //return resource;
 
   var results = function(obj) {
-    if(!data[obj.projectSlug]) {
+    if(!data || !data[obj.projectSlug]) {
       data[obj.projectSlug] = resource.query(obj);
     }
     return data[obj.projectSlug];
@@ -64,19 +71,20 @@ acServices.factory('Project', function($resource) {
 
 
 acServices.factory('Tasks', function($resource) { 
-  var data;
+  var data = Array();
   var resource = $resource(localStorage.api_url + '?path_info=projects/:projectSlug/tasks&format=json&auth_api_token=' + localStorage.api_key); 
 
-  var results = function() {
-    if(!data) {
-      data = resource.query();
+  var results = function(obj) {
+    if(!data || !data[obj.projectSlug]) {
+      data[obj.projectSlug] = resource.query(obj);
     }
-    return data;
+    console.log(obj.projectSlug);
+    return data[obj.projectSlug];
   }
 
   return {
-    query: function() {
-      return results(); 
+    query: function(obj) {
+      return results(obj); 
     }
   };
 });
@@ -87,15 +95,69 @@ acServices.factory('Task', function($resource) {
   var resource = $resource(localStorage.api_url + '?path_info=projects/:projectSlug/tasks/:taskId&format=json&auth_api_token=' + localStorage.api_key); 
 
   var results = function(obj) {
-    if(!data[obj.projectSlug]) {
-      data[obj.projectSlug] = resource.query(obj);
+    if(!data || !data[obj.projectSlug + '-' + obj.taskId]) {
+      data[obj.projectSlug + '-' + obj.taskId] = resource.query(obj);
     }
-    return data[obj.projectSlug];
+    return data[obj.projectSlug + '-' + obj.taskId];
   }
 
   return {
     get: function(obj) {
       return results(obj); 
+    }
+  };
+});
+
+
+acServices.factory('Labels', function($resource) { 
+  var data;
+  var resource = $resource(localStorage.api_url + '?path_info=info/labels/project&format=json&auth_api_token=' + localStorage.api_key); 
+
+  var results = function(obj) {
+    if(!data) {
+      data = resource.query(obj);
+    }
+    return processLabels();
+  }
+
+  var processLabels = function() {
+    if (data.length > 0 && data[0].name != 'ALL')
+    {
+      data.unshift({"id":"", "name":"ALL"});
+    }
+    return data;
+  }
+
+  return {
+    query: function(obj) {
+      return results(); 
+    }
+  };
+});
+
+
+acServices.factory('Categories', function($resource) { 
+  var data;
+  var resource = $resource(localStorage.api_url + '?path_info=projects/categories&format=json&auth_api_token=' + localStorage.api_key); 
+
+  var results = function() {
+    if(!data) {
+      data = resource.query();
+    }
+    return processCategories();
+  }
+
+  var processCategories = function() {
+    if (data.length > 0 && data[0].name != 'ALL')
+    {
+      data.unshift({"id":"", "name":"ALL"});
+    }
+    return data;
+  }
+
+  return {
+    query: function() {
+      return results(); 
     }
   };
 });

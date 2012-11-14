@@ -8,7 +8,7 @@
     </ul>
     
     <ul class="list">
-      <li ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0', label_id:selectedProjectLabel, category_id:selectedProjectCategory} | orderBy:orderProp" ng-class="{selected: selectedProject==project}" class="ng-mouseover: {over};">
+      <li ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0', label_id:selectedProjectLabel, category_id:selectedProjectCategory} | orderBy:projectOrder" ng-class="{selected: selectedProject==project}" class="ng-mouseover: {over};">
        <!-- <a href="#/projects/{{project.slug}}">{{project.name}}</a> -->
        <a ng:click="selectproject(project)">{{project.name}}</a>
       </li>
@@ -24,14 +24,62 @@
     </ul>
 
     <ul class="list">
-      <li ng-repeat="task in tasks" ng-class="{selected: selectedTask==task}">
-       <a ng:click="selecttask(task)">{{task.name}}</a>
+      <li ng-repeat="task in tasks | orderBy:taskOrder" ng-class="{selected: selectedTask==task}">
+       <task-list-item task="task"></task-list-item>
       </li>
     </ul> 
   </div>
 
   <div class="pane details">
     <h2>Details</h2>
-    {{task}}
+    <h3>{{task.name}}</h3>
+    <dt>completed</dt><dd>{{task.is_completed}}</dd>
+<!-- 
+
+"completed_by"
+created_on":
+created_by
+updated_by
+      updated_on
+"state":3,
+   "is_archived":0,
+   "is_trashed":0,
+   "visibility":1,
+   "completed_on":
+   "is_completed":1,
+   "priority":0,
+   "due_on":
+    "comments_url":"http:\/\/collab.stinkdigital.com\/projects\/dicks-sporting-goods\/tasks\/4\/comments",
+   "comments_count":0,
+   "is_locked":false,
+   "subtasks_url":"http:\/\/collab.stinkdigital.com\/projects\/dicks-sporting-goods\/tasks\/4\/subtasks",
+   "total_subtasks":0,
+   "open_subtasks":0,
+   "completed_subtasks":0,
+   "attachments_url":"http:\/\/collab.stinkdigital.com\/projects\/dicks-sporting-goods\/tasks\/4\/attachments",
+   "attachments":[
+
+   ],
+   "attachments_count":0,
+   "assignee":
+   "delegated_by":
+   "other_assignees":null,
+   "category":
+   "label":
+   "user_is_subscribed":false,
+   "subscribers"
+   "is_favorite":false,
+   "body":"",
+   "body_formatted":"",
+   "object_time":0,
+   "object_expenses":0,
+   "estimate":null,
+   "version":2,
+   "project_id":190,
+   "milestone_id":0,
+   "project"
+
+
+     -->
   </div>
 </div>

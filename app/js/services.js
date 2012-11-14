@@ -22,6 +22,12 @@ function processAcList(Type) {
         data.created_on = data.created_on ? data.created_on.formatted_date : null;
         data.updated_on = data.updated_on ? data.updated_on.formatted_date : null;
 
+        if (data.label)
+        {
+          data.label_id = data.label.id;
+          data.label = data.label.name;
+        }
+
         //mark as processed
         data.processed = true;
         console.log(data);
@@ -38,6 +44,18 @@ function processDropdown(Type) {
     angular.forEach(response.data, function(data) {
       list.push(new Type(data));
     });
+    return list;
+  }
+}
+
+function assocArrayId(Type) {
+  return function(response) {
+    var list = Array();
+    angular.forEach(response.data, function(data) {
+      console.log(data);
+      list.push(new Type(data));
+    });
+    console.log(list);
     return list;
   }
 }
@@ -74,7 +92,6 @@ acServices.factory('Tasks', function($http) {
     if (!data[projectSlug]) {
       data[projectSlug] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks&format=json&auth_api_token=' + localStorage.api_key).then(processAcList(Tasks));
     }
-    console.log(data[projectSlug]);
     return data[projectSlug];
   }
   Tasks.get = function(projectSlug, taskId) {
@@ -89,16 +106,23 @@ acServices.factory('Tasks', function($http) {
 
 
 acServices.factory('Labels', function($http) { 
-  var data;
+  var data = Array();
   var Labels = function(data) {
       angular.copy(data, this);
     };
   Labels.query = function() {
-    if (!data)
+    if (!data['projects'])
     {
-      data = $http.get(localStorage.api_url + '?path_info=info/labels/project&format=json&auth_api_token=' + localStorage.api_key).then(processDropdown(Labels));
+      data['projects'] = $http.get(localStorage.api_url + '?path_info=info/labels/project&format=json&auth_api_token=' + localStorage.api_key).then(processDropdown(Labels));
     }
-    return data;
+    return data['projects'];
+  };
+  Labels.taskQuery = function() {
+    if (!data['tasks'])
+    {
+      data['tasks'] = $http.get(localStorage.api_url + '?path_info=info/labels/assignment&format=json&auth_api_token=' + localStorage.api_key).then(assocArrayId(Labels));
+    }
+    return data['tasks'];
   }
   return Labels;
 });

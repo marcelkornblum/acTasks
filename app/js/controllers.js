@@ -65,9 +65,10 @@ function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, Auth, $lo
   $scope.projects = Projects.query();
   $scope.projectlabels = Labels.query();
   $scope.projectcategories = Categories.query();
-  $scope.tasks = Array();  
+  $scope.tasklabels = Labels.taskQuery();
+  //get all project people for task assignees
 
-  $scope.orderProp = 'name';
+  $scope.projectOrder = 'name';
   $scope.selectedProjectLabel = "";
   $scope.selectedProjectCategory = "";
 
@@ -77,10 +78,15 @@ function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, Auth, $lo
     $scope.tasks = Tasks.query($scope.selectedProject.slug);
   };
 
+
+  $scope.tasks = Array();  
+  $scope.taskOrder = 'priority';
+
   $scope.selecttask = function(task) {
     $scope.selectedTask = task;
     console.log(task.slug);
     $scope.task = Tasks.get($scope.selectedProject.slug, task.slug);
+    $scope.comments = '';//Tasks.get($scope.selectedProject.slug, task.slug);
   };
 }
 

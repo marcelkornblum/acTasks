@@ -22,7 +22,7 @@ angular.module('acDirectives', []).
         restrict: 'E',
 	    replace: true,
 	    transclude: true,
-  		template: '<span><task-priority-box task="task"></task-priority-box><a ng:click="selecttask(task)" class="name">{{task.name}}</a><task-label-box task="task"></task-label-box></span>'
+  		template: '<span><task-priority-box task="task"></task-priority-box><task-assignee-box task="task"></task-assignee-box><a ng:click="selecttask(task)" class="name">{{task.name}}</a><task-label-box task="task"></task-label-box><task-category-box task="task"></task-category-box></span>'
   	};
   }).
   directive('taskPriorityBox', function() {
@@ -33,19 +33,19 @@ angular.module('acDirectives', []).
 	    	var bgcolor = '#fff';
 	    	var char = '';
 	    	switch (scope.task.priority) {
-	    		case -2:
+	    		case 2:
 	    			bgcolor = '#f00';
 	    			char = '&raquo;';
 	    			break;
-	    		case -1:
+	    		case 1:
 	    			bgcolor = 'rgb(255, 122, 0);';
 	    			char = '&rsaquo;';
 	    			break;
-	    		case 1:
+	    		case -1:
 	    			bgcolor = '#6BBE6B';
 	    			char = '&lsaquo;';
 	    			break;
-	    		case 2:
+	    		case -2:
 	    			bgcolor = '#090';
 	    			char = '&laquo;';
 	    			break;
@@ -61,12 +61,8 @@ angular.module('acDirectives', []).
 	    link: function (scope, element, attrs) {
 	    	var label;
 	    	scope.$watch('tasklabels', function(newValue, oldValue, scope) {
-	    		// console.log(angular.isArray(newValue));
-	    		// console.log(newValue.length);
-	    		if (newValue !== undefined)// && newValue.length > 0)
+	    		if (newValue !== undefined)
 	    		{
-		    		console.log (scope.tasklabels)
-		    		console.log (scope.task)
 	    			for (var i=0; i<newValue.length; i++)
 		    		{
 		    			if(newValue[i].id == scope.task.label_id)
@@ -75,24 +71,58 @@ angular.module('acDirectives', []).
 		    				break;
 		    			}
 		    		}
-	    			element.html('<a ng:click="changelabel(task)" class="label" style="background-color: ' + scope.label.bg_color + '">' + scope.label.name[0] + '</a>');
+	    			element.html('<a ng:click="changelabel(task)" class="label" style="background-color: ' + scope.label.bg_color + '">' + scope.label.name + '</a>');
 	    		}
 	    		return newValue;
-	    	}, true
-	    	);
-
-	    		
-	    	// angular.forEach(scope.tasklabels, function(thislabel, key) {
-	    	// 	console.log(thislabel + ' +++++ ' + key);
-	    	// 	if (thislabel.id = scope.task.label_id)
-	    	// 	{
-	    	// 		label = thislabel;
-	    	// 	}
-	    	// })
-	    	// console.log(scope.tasklabels);
-	    	// console.log(scope.task.label_id);
-	    	// console.log(label);
-	    	
+	    	}, true);
+	    },
+  	};
+  }).
+  directive('taskCategoryBox', function() {
+  	return {
+        restrict: 'E',
+	    transclude: true,
+	    link: function (scope, element, attrs) {
+	    	var category;
+	    	scope.$watch('taskcategories', function(newValue, oldValue, scope) {
+	    		if (newValue !== undefined)
+	    		{
+	    			for (var i=0; i<newValue.length; i++)
+		    		{
+		    			if(newValue[i].id == scope.task.category_id)
+		    			{
+		    				scope.category = newValue[i];
+		    				break;
+		    			}
+		    		}
+	    			element.html('<a ng:click="changecategory(task)" class="category">' + scope.category.name + '</a>');
+	    		}
+	    		return newValue;
+	    	}, true);
+	    },
+  	};
+  }).
+  directive('taskAssigneeBox', function() {
+  	return {
+        restrict: 'E',
+	    transclude: true,
+	    link: function (scope, element, attrs) {
+	    	var assignee;
+	    	scope.$watch('taskpeople', function(newValue, oldValue, scope) {
+	    		if (newValue !== undefined)
+	    		{
+	    			for (var i=0; i<newValue.length; i++)
+		    		{
+		    			if(newValue[i].id == scope.task.assignee_id)
+		    			{
+		    				scope.assignee = newValue[i];
+		    				break;
+		    			}
+		    		}
+	    			element.html('<a ng:click="changeassignee(task)" class="assignee" >' + scope.assignee.initials + '</a>');
+	    		}
+	    		return newValue;
+	    	}, true);
 	    },
   	};
   });

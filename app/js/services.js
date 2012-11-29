@@ -28,11 +28,52 @@ function processAcList(Type) {
           data.label = data.label.name;
         }
 
+        if (data.priority != undefined)
+        {
+          switch (data.priority)
+          {
+            case 2:
+              data.priorityName = 'TOP';
+              break;
+            case 1:
+              data.priorityName = 'HIGH';
+              break;
+            case 0:
+              data.priorityName = 'NONE';
+              break;
+            case -1:
+              data.priorityName = 'LOW';
+              break;
+            case -2:
+              data.priorityName = 'BOTTOM';
+              break;
+          }
+        }
+
         //mark as processed
         data.processed = true;
         console.log(data);
 
       list.push(new Type(data));
+    });
+    return list;
+  }
+}
+
+function processUsers(Type) {
+  return function(response) {
+    var list = [];
+    angular.forEach(response.data, function(data) {
+      var user = data.user;
+      user.role = data.role;
+      user.role_id = data.role_id;
+      user.permissions = data.permissions;
+      user.initials = user.first_name[0] + user.last_name[0];
+
+      var pieces = user.permalink.split('/');
+      user.slug = pieces[pieces.length - 1];
+
+      list.push(new Type(user));
     });
     return list;
   }
@@ -52,10 +93,8 @@ function assocArrayId(Type) {
   return function(response) {
     var list = Array();
     angular.forEach(response.data, function(data) {
-      console.log(data);
       list.push(new Type(data));
     });
-    console.log(list);
     return list;
   }
 }
@@ -77,7 +116,6 @@ acServices.factory('Projects', function($http) {
     }
     return data[projectSlug];
   }
-  // Put other business logic on Phone here
   return Projects;
 });
 
@@ -100,7 +138,6 @@ acServices.factory('Tasks', function($http) {
     }
     return data[projectSlug + '-' + taskId];
   }
-  // Put other business logic on Phone here
   return Tasks;
 });
 
@@ -120,7 +157,7 @@ acServices.factory('Labels', function($http) {
   Labels.taskQuery = function() {
     if (!data['tasks'])
     {
-      data['tasks'] = $http.get(localStorage.api_url + '?path_info=info/labels/assignment&format=json&auth_api_token=' + localStorage.api_key).then(assocArrayId(Labels));
+      data['tasks'] = $http.get(localStorage.api_url + '?path_info=info/labels/assignment&format=json&auth_api_token=' + localStorage.api_key).then(processDropdown(Labels));
     }
     return data['tasks'];
   }
@@ -129,19 +166,42 @@ acServices.factory('Labels', function($http) {
 
 
 acServices.factory('Categories', function($http) { 
-  var data;
+  var data = Array();
   var Categories = function(data) {
       angular.copy(data, this);
     };
   Categories.query = function() {
-    if (!data)
+    if (!data['projects'])
     {
-      data = $http.get(localStorage.api_url + '?path_info=projects/categories&format=json&auth_api_token=' + localStorage.api_key).then(processDropdown(Categories));
+      data['projects'] = $http.get(localStorage.api_url + '?path_info=projects/categories&format=json&auth_api_token=' + localStorage.api_key).then(processDropdown(Categories));
     }
-    return data;
+    return data['projects'];
+  };
+  Categories.taskQuery = function(projectSlug) {
+    if (!data[projectSlug])
+    {
+      data[projectSlug] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/categories&format=json&auth_api_token=' + localStorage.api_key).then(processDropdown(Categories));
+    }
+    return data[projectSlug];
   }
   return Categories;
   });
+
+
+
+acServices.factory('People', function($http) {
+  var data = Array();
+  var People = function(data) {
+      angular.copy(data, this);
+    };
+  People.query = function(projectSlug) {
+    if (!data[projectSlug]) {
+      data[projectSlug] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/people&format=json&auth_api_token=' + localStorage.api_key).then(processUsers(People));
+    }
+    return data[projectSlug];
+  }
+  return People;
+});
 
 
 
@@ -154,6 +214,20 @@ Auth.factory('Auth', function() {
     api_url: localStorage.api_url,
     api_key: localStorage.api_key,
     tested: localStorage.tested,
+    login: function(api_url, email, password) {
+      console.log(api_url)
+      console.log(email)
+      console.log(password)
+      console.log(Auth.client_name)
+      // var params = {'api_subscription[email]': email, 'api_subscription[password]': password, 'api_subscription[client_name]': Auth.client_name, 'api_subscription[client_vendor]': Auth.client_vendor}
+      // var keyString = api_url + '?api_subscription[email]=' + email + '&api_subscription[password]=' + password + '&api_subscription[client_name]=' + Auth.client_name + '&api_subscription[client_vendor]=' + Auth.client_vendor; 
+      // var data = $http({method: 'POST', url: keyString});
+      jQuery.ajax({
+        url: api_url,
+        data: "api_subscription[email]=" + email + "&api_subscription[password]=" + password + "&api_subscription[client_name]=" + Auth.client_name + "&api_subscription[client_vendor]=" + Auth.client_vendor,
+        type: "POST"})
+      console.log(data);
+    },
     save: function(api_url, api_key) {
       if (localStorage.tested)
       {

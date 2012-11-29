@@ -2,13 +2,13 @@
   <div class="pane projects">
     <h2>Projects</h2><span class="filter">FILTER <input type="checkbox" ng-model="projectFilters"></span>
     <ul class="filter" ng-show="projectFilters">
-      <li><span>Search:</span><input ng-model="Projectquery" /></li>
+      <li><span>Search:</span><input ng-model="projectQuery" /></li>
       <li><span>Category:</span><select ng-model="selectedProjectCategory" ng-options="n.id as n.name for n in projectcategories"></select></li>
       <li><span>Label:</span><select ng-model="selectedProjectLabel" ng-options="n.id as n.name for n in projectlabels"></select></li>
     </ul>
     
     <ul class="list">
-      <li ng-repeat="project in projects | filter:query | filter:{is_completed:'0', is_archived:'0', label_id:selectedProjectLabel, category_id:selectedProjectCategory} | orderBy:projectOrder" ng-class="{selected: selectedProject==project}" class="ng-mouseover: {over};">
+      <li ng-repeat="project in projects | filter:{name:projectQuery,  is_completed:'0', is_archived:'0', label_id:selectedProjectLabel, category_id:selectedProjectCategory} | orderBy:projectOrder" ng-class="{selected: selectedProject==project}" class="ng-mouseover: {over};">
        <!-- <a href="#/projects/{{project.slug}}">{{project.name}}</a> -->
        <a ng:click="selectproject(project)">{{project.name}}</a>
       </li>
@@ -16,15 +16,33 @@
   </div>
 
   <div class="pane tasks">
-    <h2>Tasks</h2><span class="filter">FILTER <input type="checkbox" ng-model="taskFilters"></span>
+    <h2>Tasks</h2><span class="filter">FILTER <input type="checkbox" ng-model="taskFilters"></span><span class="filter">ORDER <input type="checkbox" ng-model="taskOrders"></span>
     <ul class="filter" ng-show="taskFilters">
-      <li><span>Search:</span><input ng-model="query" /></li>
-      <li><span>Category:</span><select ng-model="selectedCategory" ng-options="n.id as n.name for n in projectcategories"></select></li>
-      <li><span>Label:</span><select ng-model="selectedLabel" ng-options="n.id as n.name for n in projectlabels"></select></li>
+      <li><span>Search:</span><input ng-model="taskQuery" /></li>
+      <li><span>Priority:</span><select ng-model="selectedTaskPriority">
+        <option value="">ALL</option>
+        <option value="TOP">Highest</option>
+        <option value="HIGH">High</option>
+        <option value="NONE">None</option>
+        <option value="LOW">Low</option>
+        <option value="BOTTOM">Lowest</option>
+      </select></li>
+      <li><span>Label:</span><select ng-model="selectedTaskLabel" ng-options="n.id as n.name for n in tasklabels"></select></li>
+      <li><span>Category:</span><select ng-model="selectedTaskCategory" ng-options="n.id as n.name for n in taskcategories"></select></li>
+      <li><span>Completed:</span><input type="checkbox" ng-model="selectedTaskComplete" ng-true-value="1"
+       ng-false-value="0"></li>
+    </ul>
+    <ul class="filter" ng-show="taskOrders">
+      <li><span>Order By:</span>
+        <a href="" ng-click="taskOrder = 'priority'; taskReverse=!taskReverse">PRIORITY</a>
+        <a href="" ng-click="taskOrder = 'assignee_id'; taskReverse=!taskReverse">ASSIGNEE</a>
+        <a href="" ng-click="taskOrder = 'category_id'; taskReverse=!taskReverse">CATEGORY</a>
+        <a href="" ng-click="taskOrder = 'label_id'; taskReverse=!taskReverse">LABEL</a>
+      </li>
     </ul>
 
     <ul class="list">
-      <li ng-repeat="task in tasks | orderBy:taskOrder" ng-class="{selected: selectedTask==task}">
+      <li ng-repeat="task in tasks | filter:{name:taskQuery,  is_completed:selectedTaskComplete, label_id:selectedTaskLabel, category_id:selectedTaskCategory, priorityName:selectedTaskPriority} | orderBy:taskOrder:taskReverse" ng-class="{selected: selectedTask==task}">
        <task-list-item task="task"></task-list-item>
       </li>
     </ul> 

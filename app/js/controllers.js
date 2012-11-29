@@ -1,6 +1,6 @@
 'use strict';
 
-/* Controllers */
+/* Controllers *
 
 
 function ProjectListCtrl($scope, Projects, Labels, Categories, Auth, $location) 
@@ -55,36 +55,45 @@ function TaskDetailCtrl($scope, $routeParams, Tasks, Auth)
 
 
 
+*/
 
 
 
 
-
-function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, Auth, $location) 
+function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, People, Auth, $location) 
 {
   $scope.projects = Projects.query();
   $scope.projectlabels = Labels.query();
   $scope.projectcategories = Categories.query();
-  $scope.tasklabels = Labels.taskQuery();
   //get all project people for task assignees
 
-  $scope.projectOrder = 'name';
+  $scope.projectQuery = '';
   $scope.selectedProjectLabel = "";
   $scope.selectedProjectCategory = "";
+  $scope.projectOrder = 'name';
+
+  $scope.tasks = Array(); 
+  $scope.taskcategories = [{"id":"", "name":"ALL"}]; 
+  $scope.tasklabels = Labels.taskQuery();
 
   $scope.selectproject = function(project) {
     $scope.selectedProject = project;
-    console.log(project.slug);
     $scope.tasks = Tasks.query($scope.selectedProject.slug);
+    $scope.taskcategories = Categories.taskQuery($scope.selectedProject.slug);
+    $scope.taskpeople = People.query($scope.selectedProject.slug);
+
+    $scope.taskQuery = '';
+    $scope.selectedTaskLabel = "";
+    $scope.selectedTaskCategory = "";
+    $scope.selectedTaskPriority = "";
+    $scope.selectedTaskComplete = 0;
+    $scope.selectedTaskArchived = 0;
+    $scope.taskOrder = 'priority';
+    $scope.taskReverse = true;
   };
-
-
-  $scope.tasks = Array();  
-  $scope.taskOrder = 'priority';
 
   $scope.selecttask = function(task) {
     $scope.selectedTask = task;
-    console.log(task.slug);
     $scope.task = Tasks.get($scope.selectedProject.slug, task.slug);
     $scope.comments = '';//Tasks.get($scope.selectedProject.slug, task.slug);
   };
@@ -101,11 +110,15 @@ function AuthCtrl($scope, Auth, $http)
   $scope.auth = Auth
   $scope.newUrl = Auth.api_url
   $scope.newKey = Auth.api_key
+  $scope.newEmail = Auth.email
   $scope.save = function() {
     Auth.save($scope.newUrl, $scope.newKey)
   }
   $scope.test = function() {
     Auth.test($scope.newUrl, $scope.newKey, $http)
+  }
+  $scope.login = function() {
+    Auth.test($scope.newEmail, $scope.password, $http)
   }
 
   //$scope.task = Auth.get({path: 'projects/' + $routeParams.projectSlug + '/tasks/' + $routeParams.taskId});

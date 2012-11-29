@@ -9,6 +9,14 @@ angular.module('acDirectives', []).
       elm.text(version);
     };
   }]).
+  directive('acLink', function(item) {
+  	return {
+        restrict: 'E',
+	    replace: true,
+	    transclude: true,
+  		template: '<a href="{{item.permalink}}"><span class="ac-icon"></span></a>'
+  	};
+  }).
   directive('taskListItem', function() {
   	return {
         restrict: 'E',

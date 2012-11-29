@@ -9,12 +9,13 @@ angular.module('acDirectives', []).
       elm.text(version);
     };
   }]).
-  directive('acLink', function(item) {
+  directive('acLink', function() {
   	return {
         restrict: 'E',
-	    replace: true,
 	    transclude: true,
-  		template: '<a href="{{item.permalink}}"><span class="ac-icon"></span></a>'
+	    // link: function (scope, element, attrs) {
+	  		template: '<a href="{{project.permalink}}"><span class="ac-icon"></span></a>'
+	  	// }
   	};
   }).
   directive('taskListItem', function() {
@@ -30,7 +31,7 @@ angular.module('acDirectives', []).
         restrict: 'E',
 	    transclude: true,
 	    link: function (scope, element, attrs) {
-	    	element.html('<a ui-jq="tooltip" ui-options="{placement:\'right\'}" ng:click="changepriority(task)" class="badge priority-' + scope.task.priorityName + '" title="Priority: ' + scope.task.priorityName + '"><i class="icon-priority-' + scope.task.priorityName + '"></i></a>');
+	    	element.html('<a rel="tooltip" ui-options="{placement:\'right\'}" ng:click="changepriority(task)" class="badge priority-' + scope.task.priorityName + '" title="Priority: ' + scope.task.priorityName + '">&nbsp;</a>');
 	    },
   	};
   }).
@@ -51,7 +52,7 @@ angular.module('acDirectives', []).
 		    				break;
 		    			}
 		    		}
-	    			element.html('<a ui-jq="tooltip" ng:click="changelabel(task)" class="label pull-right" title="Label: ' + scope.label.name + '" style="background-color: ' + scope.label.bg_color + '; color: ' + scope.label.fg_color + ';">' + scope.label.name + '</a>');
+	    			element.html('<a rel="tooltip" ng:click="changelabel(task)" class="label pull-right" title="Label: ' + scope.label.name + '" style="background-color: ' + scope.label.bg_color + '; color: ' + scope.label.fg_color + ';">' + scope.label.name + '</a>');
 	    		}
 	    		return newValue;
 	    	}, true);
@@ -75,7 +76,7 @@ angular.module('acDirectives', []).
 		    				break;
 		    			}
 		    		}
-	    			element.html('<a ui-jq="tooltip" ng:click="changecategory(task)" class="label" title="Category: ' + scope.category.name + '">' + scope.category.name + '</a>');
+	    			element.html('<a rel="tooltip" ng:click="changecategory(task)" class="label" title="Category: ' + scope.category.name + '">' + scope.category.name + '</a>');
 	    		}
 	    		return newValue;
 	    	}, true);
@@ -99,7 +100,7 @@ angular.module('acDirectives', []).
 		    				break;
 		    			}
 		    		}
-	    			element.html('<a ui-jq="tooltip" ng:click="changeassignee(task)" class="label label-inverse" title="Assignee: ' + scope.assignee.name + '">' + scope.assignee.initials + '</a>');
+	    			element.html('<a rel="tooltip" ng:click="changeassignee(task)" class="label label-inverse" title="Assignee: ' + scope.assignee.name + '">' + scope.assignee.initials + '</a>');
 	    		}
 	    		return newValue;
 	    	}, true);

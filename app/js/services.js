@@ -8,13 +8,18 @@ function processAcList(Type) {
   return function(response) {
     var list = [];
     angular.forEach(response.data, function(data) {
-
+      
         //get slug
         var pieces = data.permalink.split('/');
         data.slug = pieces[pieces.length - 1];
 
         data.created_on = data.created_on ? data.created_on.formatted_date : null;
         data.updated_on = data.updated_on ? data.updated_on.formatted_date : null;
+
+        if (data.task_id)
+        {
+          data.id = data.task_id;
+        }
 
         if (data.label)
         {
@@ -58,6 +63,65 @@ function processAcList(Type) {
       list.push(new Type(data));
     });
     return list;
+  }
+}
+
+function processAcOne(Type) {
+  return function(data) {
+      console.log(data);
+        //get slug
+        var pieces = data.permalink.split('/');
+        data.slug = pieces[pieces.length - 1];
+
+        data.created_on = data.created_on ? data.created_on.formatted_date : null;
+        data.updated_on = data.updated_on ? data.updated_on.formatted_date : null;
+
+        if (data.task_id)
+        {
+          data.id = data.task_id;
+        }
+
+        if (data.label)
+        {
+          data.label_id = data.label.id;
+          data.label = data.label.name;
+        }
+
+        if (data.body)
+        {
+          var tmp = document.createElement("DIV");
+          tmp.innerHTML = data.body;
+          data.body =  tmp.textContent||tmp.innerText;
+        }
+
+        if (data.priority != undefined)
+        {
+          switch (data.priority)
+          {
+            case 2:
+              data.priorityName = 'TOP';
+              break;
+            case 1:
+              data.priorityName = 'HIGH';
+              break;
+            case 0:
+              data.priorityName = 'NONE';
+              break;
+            case -1:
+              data.priorityName = 'LOW';
+              break;
+            case -2:
+              data.priorityName = 'BOTTOM';
+              break;
+          }
+        }
+
+        //mark as processed
+        data.processed = true;
+       // console.log(data);
+
+      data = new Type(data);
+      return data;
   }
 }
 
@@ -117,6 +181,19 @@ function assocArrayId(Type) {
   }
 }
 
+function processComments(Type, projectSlug, taskId) {
+  return function(response) {
+    var list = Array();
+    angular.forEach(response.data, function(data) {
+      if (data && data.id != undefined){
+        var item = Type.getComment(projectSlug, taskId, data.id);
+        list.push(item);
+      }
+    });
+    return list;
+  }
+}
+
 acServices.factory('Projects', function($http) {
   var data = Array();
   var Projects = function(data) {
@@ -133,6 +210,12 @@ acServices.factory('Projects', function($http) {
       data[projectSlug] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '&format=json&auth_api_token=' + localStorage.api_key);//.then(processProjects(Projects));
     }
     return data[projectSlug];
+  }
+  Projects.getMilestones = function(projectSlug) {
+    if(!data || !data[projectSlug + '-milestones']) {
+      data[projectSlug + '-milestones'] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/milestones&format=json&auth_api_token=' + localStorage.api_key);//.then(processProjects(Projects));
+    }
+    return data[projectSlug + '-milestones'];
   }
   return Projects;
 });
@@ -151,10 +234,36 @@ acServices.factory('Tasks', function($http) {
     return data[projectSlug];
   }
   Tasks.get = function(projectSlug, taskId) {
-    if(!data || !data[projectSlug + '-' + taskId]) {
+    if(!data[projectSlug + '-' + taskId]) {
       data[projectSlug + '-' + taskId] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/' + taskId + '&format=json&auth_api_token=' + localStorage.api_key);//.then(processTasks(Tasks));
     }
     return data[projectSlug + '-' + taskId];
+  }
+  Tasks.comments = function(projectSlug, taskId) {
+    if(!data[projectSlug + '-' + taskId + '-comments']) {
+      data[projectSlug + '-' + taskId + '-comments'] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/' + taskId + '/comments&format=json&auth_api_token=' + localStorage.api_key).then(processComments(Tasks, projectSlug, taskId));
+    }
+    return data[projectSlug + '-' + taskId + '-comments'];
+  }
+  Tasks.getComment = function(projectSlug, taskId, commentId) {
+    if(!data[projectSlug + '-' + taskId + '-comments-' + commentId]) {
+      data[projectSlug + '-' + taskId + '-comments-' + commentId] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/' + taskId + '/comments/'+ commentId + '&format=json&auth_api_token=' + localStorage.api_key).then(processAcOne(Tasks));
+    }
+    return data[projectSlug + '-' + taskId + '-comments-' + commentId];
+  }
+  Tasks.put = function(projectSlug, task) {
+    var url = localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/' + task.id + '/edit&format=json&auth_api_token=' + localStorage.api_key;
+    var data = 'submitted=submitted&';
+    for (var key in task) {
+      if (key == 'body' || key == 'name' || key == 'priority' || key == 'assignee_id' || key == 'label_id' || key == 'category_id')
+      {
+        var keyString = 'task[' + key + ']=' + encodeURIComponent(task[key]) + '&';
+        data = data + keyString;
+      }
+    }
+    data = 'submitted=submitted&task[name]=Adding%20resource%20on%20home%20page%3A%20won\'t%20reset%20after%20save';
+    console.log(data);
+    return $http.post(url, data);//.then(processTasks(Tasks));
   }
   return Tasks;
 });
@@ -229,7 +338,7 @@ acServices.factory('People', function($http) {
 
 
 
-acServices.value('version', '0.2');
+acServices.value('version', '0.3');
 
 
 var Auth = angular.module('Auth', []);

@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, People, Auth, $location) 
+function CombinedListCtrl($rootScope, $scope, Projects, Tasks, Labels, Categories, People, Auth, $location) 
 {
   $scope.me = People.me();
   $scope.projects = Projects.query();
@@ -11,7 +11,7 @@ function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, People, A
 
   $scope.projectQuery = '';
   $scope.selectedProjectLabel = '';
-  $scope.selectedProjectCategory = '';
+  $rootScope.selectedProjectCategory = '';
   $scope.projectOrder = 'name';
 
   $scope.tasks = Array(); 
@@ -20,6 +20,7 @@ function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, People, A
 
   $scope.selectproject = function(project) {
     $scope.selectedProject = project;
+    localStorage.selectedProjectId = project.id;
     $scope.selectedTask = '';
     $scope.tasks = Tasks.query($scope.selectedProject.slug);
     $scope.taskcategories = Categories.taskQuery($scope.selectedProject.slug);
@@ -32,17 +33,46 @@ function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, People, A
     $scope.selectedTaskComplete = 0;
     $scope.selectedTaskArchived = 0;
     $scope.selectedTaskAssignee = $scope.me.id;
-    console.log($scope.me);
+    //console.log($scope.me);
     $scope.taskOrder = 'priority';
     $scope.taskReverse = true;
   };
 
   $scope.selecttask = function(task) {
     console.log(task.assignee_id);
+    localStorage.selectedTaskId = task.id;
     $scope.selectedTask = task;
     $scope.task = Tasks.get($scope.selectedProject.slug, task.slug);
-    $scope.comments = '';//Tasks.get($scope.selectedProject.slug, task.slug);
+    $scope.comments = Tasks.comments($scope.selectedProject.slug, task.slug);
   };
+
+  $scope.updatetask = function(task) {
+    console.log(task);
+    Tasks.put($scope.selectedProject.slug, task);
+  };
+
+
+  // Quick and dirty 'remember your place' functions
+  $scope.$watch('projects', function(newValue, oldValue, scope) {
+    if (localStorage.selectedProjectId != undefined && newValue !== undefined)
+    {
+      angular.forEach(scope.projects.$$v, function(project) {
+        if (project.id == localStorage.selectedProjectId) {
+          scope.selectproject(project);
+        }
+      });
+    }
+  });
+  $scope.$watch('tasks', function(newValue, oldValue, scope) {
+    if (localStorage.selectedTaskId != undefined && newValue !== undefined)
+    {
+      angular.forEach(scope.tasks.$$v, function(task) {
+        if (task.id == localStorage.selectedTaskId) {
+          scope.selecttask(task);
+        }
+      });
+    }
+  });
 }
 
 

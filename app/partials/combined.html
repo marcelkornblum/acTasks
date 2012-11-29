@@ -5,7 +5,7 @@
         <div class="navbar">
           <div class="navbar-inner">
             <div class="container">
-              <a href="" class="brand">Projects</a>
+              <a href="" class="brand">Projects {{selectedProjectCategory}}</a>
               <ul class="nav">
                 <li class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -13,9 +13,19 @@
                     <span class="caret"></span>
                   </a>
                   <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                    <li><span>Search:</span><input ng-model="projectQuery" /></li>
-                    <li><span>Category:</span><select ng-model="selectedProjectCategory" ng-options="n.id as n.name for n in projectcategories"></select></li>
-                    <li><span>Label:</span><select ng-model="selectedProjectLabel" ng-options="n.id as n.name for n in projectlabels"></select></li>
+              <!--       <li><span>Search:</span><input ng-model="projectQuery" /></li> -->
+                    <li ng-class="{active: selectedProjectCategory!=''}" class="dropdown-submenu">
+                      <a tabindex="-1" href="">Category</a>
+                      <ul class="dropdown-menu">
+                        <li ng-repeat="category in projectcategories" ng-class="{active: selectedProjectCategory==category.id}"><a ng-click="selectedProjectCategory=category.id" href="">{{category.name}}</a></li>
+                      </ul>
+                    </li>
+                    <li ng-class="{active: selectedProjectLabel!=''}" class="dropdown-submenu">
+                      <a tabindex="-1" href="">Label</a>
+                      <ul class="dropdown-menu">
+                        <li ng-repeat="label in projectlabels" ng-class="{active: selectedProjectLabel==label.id}"><a ng-click="selectedProjectLabel=label.id" href="">{{label.name}}</a></li>
+                      </ul>
+                    </li>
                   </ul>
                 </li>
               </ul>
@@ -26,8 +36,8 @@
           </div>
         </div>
         <ul class="nav nav-pills nav-stacked">
-          <li ng-repeat="project in projects | filter:{name:projectQuery,  is_completed:'0', is_archived:'0', label_id:selectedProjectLabel, category_id:selectedProjectCategory} | orderBy:projectOrder" ng-class="{active: selectedProject==project}" class="ng-mouseover: {over};">
-           <a ng:click="selectproject(project)">{{project.name}}</a>
+          <li ng-repeat="project in projects | filter:{is_completed:'0', is_archived:'0', label_id:selectedProjectLabel, category_id:selectedProjectCategory} | orderBy:projectOrder" ng-class="{active: selectedProject==project}">
+           <a ng:click="selectproject(project)">{{project.name}}<!--  <ac-link class="pull-right" item="project"> --></a>
           </li>
         </ul>
       </div><!--/.well -->
@@ -37,20 +47,49 @@
         <div class="span12">
           <div class="list">
 
-          <div class="hero-unit" ng-show="selectedTask">
+          <div class="well task-details" ng-show="selectedTask">
+            <button class="close pull-right" ng-click="selectedTask=''">&times;</button>
             <h3>{{selectedTask.name}}</h3>
+
             <p>{{selectedTask.body}}</p>
 
-            <div class="span4">
-              <p>test content</p>
-            </div>
-            <div class="span4">
-              <p>test content</p>
+            <ul class="nav nav-pills nav-stacked">
+              <li ng-repeat="comment in comments">
+               <p>{{comments.body}}</p>
+              </li>
+            </ul>
+
+            <hr />
+            <form class="form-inline">
+              <div class="span3">
+                <label class="control-label input-min">Assigned to</label>
+                <select ng-model="selectedTask.assignee_id" ng-options="n.id as n.short_display_name for n in taskpeople" class="input-small"></select>
+              </div>
+              <div class="span3">
+                <label class="control-label input-min">Label</label>
+                <select ng-model="selectedTask.label_id" ng-options="n.id as n.name for n in tasklabels" class="input-small"></select>
+              </div>
+              <div class="span3">
+                <label class="control-label input-min">Priority</label>
+                <select ng-model="selectedTask.priority" class="input-small">
+                  <option value="2">Highest</option>
+                  <option value="1">High</option>
+                  <option value="0">None</option>
+                  <option value="-1">Low</option>
+                  <option value="-2">Lowest</option>
+                </select>
+              </div>
+              <div class="span3">
+                <label class="control-label input-min">Category</label>
+                <select ng-model="selectedTask.category_id" ng-options="n.id as n.name for n in taskcategories" class="input-small"></select>
+              </div>
+            </form>
+            <div class="btn-toolbar pull-right">
+              <button class="btn" ng-click="selectedTask=''">Close</button>
+              <button class="btn btn-primary" ng-click="updatetask(selectedTask)">Update</button>
             </div>
 
-            <div class="btn-group">
-              <a class="btn" ng-click="selectedTask=''">Close &raquo;</a><a class="btn btn-primary">Update &raquo;</a>
-            </div>
+            <div class="clearfix"></div>
           </div>
 
             <div class="navbar">
@@ -79,7 +118,6 @@
                       </a>
                       <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                         <li><span>Just My Tasks:</span><input type="checkbox" ng-model="selectedTaskAssignee" ng-true-value="{{me.id}}" ng-false-value=""></li>
-                        <li><span>Search:</span><input ng-model="taskQuery" /></li>
                         <li><span>Priority:</span><select ng-model="selectedTaskPriority">
                           <option value="">ALL</option>
                           <option value="TOP">Highest</option>
@@ -95,6 +133,11 @@
                     </li>
                   </ul>
                   <ul class="nav pull-right">
+                    <li>
+                      <form class="navbar-search">
+                        <input ng-model="taskQuery" class="search-query" placeholder="Filter" />
+                      </form>
+                    </li>
                     <li><a href="" ng-click=""><i class="icon-refresh"></i></a></li>
                   </ul>
                 </div>
@@ -117,7 +160,7 @@
   <hr>
 
   <footer>
-    <p>ActiveCollab Tasker: v<span app-version></span></p>
+    <p>ActiveCollab Tasker: v<span app-version></span> spc:{{selectedProjectCategory}}</p><select ng-model="selectedProjectCategory" ng-options="n.id as n.name for n in projectcategories"></select>
   </footer>
 
 </div>

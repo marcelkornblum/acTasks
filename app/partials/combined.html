@@ -1,103 +1,124 @@
-<div ng-controller="CombinedListCtrl">
-  <div class="pane projects">
-    <h2>Projects</h2><span class="filter">FILTER <input type="checkbox" ng-model="projectFilters"></span>
-    <ul class="filter" ng-show="projectFilters">
-      <li><span>Search:</span><input ng-model="projectQuery" /></li>
-      <li><span>Category:</span><select ng-model="selectedProjectCategory" ng-options="n.id as n.name for n in projectcategories"></select></li>
-      <li><span>Label:</span><select ng-model="selectedProjectLabel" ng-options="n.id as n.name for n in projectlabels"></select></li>
-    </ul>
-    
-    <ul class="list">
-      <li ng-repeat="project in projects | filter:{name:projectQuery,  is_completed:'0', is_archived:'0', label_id:selectedProjectLabel, category_id:selectedProjectCategory} | orderBy:projectOrder" ng-class="{selected: selectedProject==project}" class="ng-mouseover: {over};">
-       <!-- <a href="#/projects/{{project.slug}}">{{project.name}}</a> -->
-       <a ng:click="selectproject(project)">{{project.name}}</a>
-      </li>
-    </ul>  
-  </div>
+<div class="container-fluid" ng-controller="CombinedListCtrl">
+  <div class="row-fluid">
+    <div class="span3">
+      <div class="list">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="container">
+              <a href="" class="brand">Projects</a>
+              <ul class="nav">
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    Filter
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <li><span>Search:</span><input ng-model="projectQuery" /></li>
+                    <li><span>Category:</span><select ng-model="selectedProjectCategory" ng-options="n.id as n.name for n in projectcategories"></select></li>
+                    <li><span>Label:</span><select ng-model="selectedProjectLabel" ng-options="n.id as n.name for n in projectlabels"></select></li>
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav pull-right">
+                <li><a href="" ng-click=""><i class="icon-refresh"></i></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <ul class="nav nav-pills nav-stacked">
+          <li ng-repeat="project in projects | filter:{name:projectQuery,  is_completed:'0', is_archived:'0', label_id:selectedProjectLabel, category_id:selectedProjectCategory} | orderBy:projectOrder" ng-class="{active: selectedProject==project}" class="ng-mouseover: {over};">
+           <a ng:click="selectproject(project)">{{project.name}}</a>
+          </li>
+        </ul>
+      </div><!--/.well -->
+    </div><!--/span-->
+    <div class="span9">
+      <div class="row-fluid">
+        <div class="span12">
+          <div class="list">
 
-  <div class="pane tasks">
-    <h2>Tasks</h2><span class="filter">FILTER <input type="checkbox" ng-model="taskFilters"></span><span class="filter">ORDER <input type="checkbox" ng-model="taskOrders"></span>
-    <ul class="filter" ng-show="taskFilters">
-      <li><span>Search:</span><input ng-model="taskQuery" /></li>
-      <li><span>Priority:</span><select ng-model="selectedTaskPriority">
-        <option value="">ALL</option>
-        <option value="TOP">Highest</option>
-        <option value="HIGH">High</option>
-        <option value="NONE">None</option>
-        <option value="LOW">Low</option>
-        <option value="BOTTOM">Lowest</option>
-      </select></li>
-      <li><span>Label:</span><select ng-model="selectedTaskLabel" ng-options="n.id as n.name for n in tasklabels"></select></li>
-      <li><span>Category:</span><select ng-model="selectedTaskCategory" ng-options="n.id as n.name for n in taskcategories"></select></li>
-      <li><span>Completed:</span><input type="checkbox" ng-model="selectedTaskComplete" ng-true-value="1"
-       ng-false-value="0"></li>
-    </ul>
-    <ul class="filter" ng-show="taskOrders">
-      <li><span>Order By:</span>
-        <a href="" ng-click="taskOrder = 'priority'; taskReverse=!taskReverse">PRIORITY</a>
-        <a href="" ng-click="taskOrder = 'assignee_id'; taskReverse=!taskReverse">ASSIGNEE</a>
-        <a href="" ng-click="taskOrder = 'category_id'; taskReverse=!taskReverse">CATEGORY</a>
-        <a href="" ng-click="taskOrder = 'label_id'; taskReverse=!taskReverse">LABEL</a>
-      </li>
-    </ul>
+          <div class="hero-unit" ng-show="selectedTask">
+            <h3>{{selectedTask.name}}</h3>
+            <p>{{selectedTask.body}}</p>
 
-    <ul class="list">
-      <li ng-repeat="task in tasks | filter:{name:taskQuery,  is_completed:selectedTaskComplete, label_id:selectedTaskLabel, category_id:selectedTaskCategory, priorityName:selectedTaskPriority} | orderBy:taskOrder:taskReverse" ng-class="{selected: selectedTask==task}">
-       <task-list-item task="task"></task-list-item>
-      </li>
-    </ul> 
-  </div>
+            <div class="span4">
+              <p>test content</p>
+            </div>
+            <div class="span4">
+              <p>test content</p>
+            </div>
 
-  <div class="pane details">
-    <h2>Details</h2>
-    <h3>{{task.name}}</h3>
-    <dt>completed</dt><dd>{{task.is_completed}}</dd>
-<!-- 
+            <div class="btn-group">
+              <a class="btn" ng-click="selectedTask=''">Close &raquo;</a><a class="btn btn-primary">Update &raquo;</a>
+            </div>
+          </div>
 
-"completed_by"
-created_on":
-created_by
-updated_by
-      updated_on
-"state":3,
-   "is_archived":0,
-   "is_trashed":0,
-   "visibility":1,
-   "completed_on":
-   "is_completed":1,
-   "priority":0,
-   "due_on":
-    "comments_url":"http:\/\/collab.stinkdigital.com\/projects\/dicks-sporting-goods\/tasks\/4\/comments",
-   "comments_count":0,
-   "is_locked":false,
-   "subtasks_url":"http:\/\/collab.stinkdigital.com\/projects\/dicks-sporting-goods\/tasks\/4\/subtasks",
-   "total_subtasks":0,
-   "open_subtasks":0,
-   "completed_subtasks":0,
-   "attachments_url":"http:\/\/collab.stinkdigital.com\/projects\/dicks-sporting-goods\/tasks\/4\/attachments",
-   "attachments":[
-
-   ],
-   "attachments_count":0,
-   "assignee":
-   "delegated_by":
-   "other_assignees":null,
-   "category":
-   "label":
-   "user_is_subscribed":false,
-   "subscribers"
-   "is_favorite":false,
-   "body":"",
-   "body_formatted":"",
-   "object_time":0,
-   "object_expenses":0,
-   "estimate":null,
-   "version":2,
-   "project_id":190,
-   "milestone_id":0,
-   "project"
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="container">
+                  <a href="" class="brand">Tasks</a>
+                  <ul class="nav">
+                   <!--  <li ng-class="{active: selectedTaskAssignee=={{me.id}}}"><a href='' ng-click="selectedTaskAssignee = !selectedTaskAssignee;">My Tasks</a></li> -->
+                    <li class="dropdown">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Order by
+                        <b class="caret"></b>
+                      </a>
+                      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li ng-class="{active: taskOrder=='priority', dropup: taskReverse==false}"><a href="" ng-click="taskOrder = 'priority'; taskReverse=!taskReverse">Priority <span class="caret"></span></a></li>
+                        <li ng-class="{active: taskOrder=='milestone', dropup: taskReverse==false}"><a href="" ng-click="taskOrder = 'milestone'; taskReverse=!taskReverse">Milestone <span class="caret"></span></a></li>
+                        <li ng-class="{active: taskOrder=='assignee_id', dropup: taskReverse==false}"><a href="" ng-click="taskOrder = 'assignee_id'; taskReverse=!taskReverse">Assignee <span class="caret"></span></a></li>
+                        <li ng-class="{active: taskOrder=='category_id', dropup: taskReverse==false}"><a href="" ng-click="taskOrder = 'category_id'; taskReverse=!taskReverse">Category <span class="caret"></span></a></li>
+                        <li ng-class="{active: taskOrder=='label_id', dropup: taskReverse==false}"><a href="" ng-click="taskOrder = 'label_id'; taskReverse=!taskReverse">Label <span class="caret"></span></a></li>
+                      </ul>
+                    </li>
+                    <li class="dropdown">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Filter
+                        <b class="caret"></b>
+                      </a>
+                      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li><span>Just My Tasks:</span><input type="checkbox" ng-model="selectedTaskAssignee" ng-true-value="{{me.id}}" ng-false-value=""></li>
+                        <li><span>Search:</span><input ng-model="taskQuery" /></li>
+                        <li><span>Priority:</span><select ng-model="selectedTaskPriority">
+                          <option value="">ALL</option>
+                          <option value="TOP">Highest</option>
+                          <option value="HIGH">High</option>
+                          <option value="NONE">None</option>
+                          <option value="LOW">Low</option>
+                          <option value="BOTTOM">Lowest</option>
+                        </select></li>
+                        <li><span>Label:</span><select ng-model="selectedTaskLabel" ng-options="n.id as n.name for n in tasklabels"></select></li>
+                        <li><span>Category:</span><select ng-model="selectedTaskCategory" ng-options="n.id as n.name for n in taskcategories"></select></li>
+                        <li><span>Completed:</span><input type="checkbox" ng-model="selectedTaskComplete" ng-true-value="1" ng-false-value="0"></li>
+                      </ul>
+                    </li>
+                  </ul>
+                  <ul class="nav pull-right">
+                    <li><a href="" ng-click=""><i class="icon-refresh"></i></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <ul class="nav nav-pills nav-stacked">
+              <li ng-repeat="task in tasks | filter:{name:taskQuery,  is_completed:selectedTaskComplete, label_id:selectedTaskLabel, category_id:selectedTaskCategory, priorityName:selectedTaskPriority} | orderBy:taskOrder:taskReverse" ng-class="{active: selectedTask==task}">
+               <task-list-item task="task"></task-list-item>
+              </li>
+            </ul>
+          </div><!--/.well -->
+          
+        </div><!--/span-->
+      </div><!--/row-->
+    </div><!--/span-->
+  </div><!--/row-->
 
 
-     -->
-  </div>
+
+  <hr>
+
+  <footer>
+    <p>ActiveCollab Tasker: v<span app-version></span></p>
+  </footer>
+
 </div>
+

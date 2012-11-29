@@ -2,38 +2,111 @@
 <html lang="en" ng-app="acTasks">
 <head>
   <meta charset="utf-8">
-  <title>ActiveCollab Tasker</title>
-  <link rel="stylesheet" href="css/app.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A faster front end for ActiveCollab's tasks module">
+  <meta name="author" content="Marcel Kornblum">
+  <title>ActiveCollab FastTask</title>
+ <!--  <link rel="stylesheet" href="css/app.css"/> -->
+  <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .list {
+        padding: 9px 0;
+      }
+      .priority-TOP {
+        background-color: red;
+      }
+      .priority-HIGH {
+        background-color: orange;
+      }
+      .priority-LOW {
+        background-color: #7cbe7c;
+      }
+      .priority-BOTTOM {
+        background-color: green;
+      }
+/*
+      [class^="icon-"],
+      [class*=" icon-"] {
+        background-image: url("img/actask-icons.png");
+      }
+      .icon-priority-TOP {
+        background-position: -22px -2px;
+      }
+      .icon-priority-HIGH {
+        background-position: -42px -2px;
+      }
+      .icon-priority-NONE {
+        background-position: -22px -20px;
+      }
+      .icon-priority-LOW {
+        background-position: -2px -1px;
+      }
+      .icon-priority-BOTTOM {
+        background-position: -2px -20px;
+      }
+*/
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet"> 
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
 </head>
 <body>
-<!-- <header id="site-header">
-  <h1><a href="/">Stink Digital Admin System</a></h1>
-  <p class="release">&beta; 0.3.5</p>
-</header> -->
-<div id="container">
-<div id="navigation">
-  <h2>Navigation</h2>
-  <ul class="site-nav">
-    <li><a href="#/logout">Logout</a></li>
-    <li><a href="#/login">Login</a></li>
-</ul></div>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="#">ActiveCollab FastTask</a>
+      <div class="nav-collapse collapse">
+        <p class="navbar-text pull-right">
+          Logged in as <a href="#" class="navbar-link">Username</a>
+        </p>
+        <ul class="nav pull-right">
+            <li><a href="#/logout">Logout</a></li>
+            <li><a href="#/login">Login</a></li>
+        </ul>
+        <ul class="nav">
+          <li class="active"><a href="#/combined">Tasks</a></li>
+    <!--       <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li> -->
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
 
 
 <ng-view />
 
-</div>
-<hr />
-<div>ActiveCollab Tasker: v<span app-version></span></div>
-
-  <!-- In production use:
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="//twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script> 
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
-  -->
-  <script src="lib/angular/angular.js"></script>
   <script src="js/app.js"></script>
   <script src="js/services.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/filters.js"></script>
   <script src="js/directives.js"></script>
+  <script src="lib/angular-ui-0.3.1/angular-ui.min.js"></script>
   <script src="lib/angular/angular-resource.js"></script>
 </body>
 </html>

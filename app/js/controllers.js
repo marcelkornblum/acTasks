@@ -1,108 +1,49 @@
 'use strict';
 
-/* Controllers *
-
-
-function ProjectListCtrl($scope, Projects, Labels, Categories, Auth, $location) 
-{
-  $scope.projects = Projects.query();
-  $scope.projectlabels = Labels.query();
-  $scope.projectcategories = Categories.query();
-
-  $scope.orderProp = 'name';
-  $scope.selectedLabel = "";
-  $scope.selectedCategory = "";
-
-  $scope.select = function(project) {
-    $scope.selected = project;
-  };
-}
-// ProjectListCtrl.$inject = ['$scope', 'Projects', 'Labels', 'Categories', 'Auth', '$location'];
-
-
-function ProjectDetailCtrl($scope, $routeParams, Projects, Auth) 
-{
-  $scope.project = Projects.get($routeParams.projectSlug);
-}
-// ProjectDetailCtrl.$inject = ['$scope', '$routeParams', 'Projects', 'Auth'];
-
-
-function ProjectOverviewCtrl($scope, $routeParams, Projects, Tasks, Auth) 
-{
-  $scope.project = Projects.get($routeParams.projectSlug);
-  //$scope.milestones = Project.query({path: 'projects/' + $routeParams.projectSlug + '/milestones', key: Auth.api_key});
-  $scope.tasks = Tasks.query({projectSlug: $routeParams.projectSlug});
-}
-// ProjectDetailCtrl.$inject = ['$scope', '$routeParams', 'Project', 'Tasks', 'Auth'];
-
-
-
-
-
-function TaskListCtrl($scope, $routeParams, Tasks, Auth) 
-{
-  $scope.tasks = Tasks.query($routeParams.projectSlug);
-  $scope.orderProp = 'name';
-}
-// TaskListCtrl.$inject = ['$scope', '$routeParams', 'Tasks', 'Auth'];
-
-
-function TaskDetailCtrl($scope, $routeParams, Tasks, Auth) 
-{
-  $scope.task = Tasks.get($routeParams.projectSlug, $routeParams.taskId);
-}
-// TaskDetailCtrl.$inject = ['$scope', '$routeParams', 'Task', 'Auth'];
-
-
-
-*/
-
-
-
+/* Controllers */
 
 function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, People, Auth, $location) 
 {
+  $scope.me = People.me();
   $scope.projects = Projects.query();
   $scope.projectlabels = Labels.query();
   $scope.projectcategories = Categories.query();
-  //get all project people for task assignees
 
   $scope.projectQuery = '';
-  $scope.selectedProjectLabel = "";
-  $scope.selectedProjectCategory = "";
+  $scope.selectedProjectLabel = '';
+  $scope.selectedProjectCategory = '';
   $scope.projectOrder = 'name';
 
   $scope.tasks = Array(); 
-  $scope.taskcategories = [{"id":"", "name":"ALL"}]; 
+  $scope.taskcategories = [{'id':'', 'name':'ALL'}]; 
   $scope.tasklabels = Labels.taskQuery();
 
   $scope.selectproject = function(project) {
     $scope.selectedProject = project;
+    $scope.selectedTask = '';
     $scope.tasks = Tasks.query($scope.selectedProject.slug);
     $scope.taskcategories = Categories.taskQuery($scope.selectedProject.slug);
     $scope.taskpeople = People.query($scope.selectedProject.slug);
 
     $scope.taskQuery = '';
-    $scope.selectedTaskLabel = "";
-    $scope.selectedTaskCategory = "";
-    $scope.selectedTaskPriority = "";
+    $scope.selectedTaskLabel = '';
+    $scope.selectedTaskCategory = '';
+    $scope.selectedTaskPriority = '';
     $scope.selectedTaskComplete = 0;
     $scope.selectedTaskArchived = 0;
+    $scope.selectedTaskAssignee = $scope.me.id;
+    console.log($scope.me);
     $scope.taskOrder = 'priority';
     $scope.taskReverse = true;
   };
 
   $scope.selecttask = function(task) {
+    console.log(task.assignee_id);
     $scope.selectedTask = task;
     $scope.task = Tasks.get($scope.selectedProject.slug, task.slug);
     $scope.comments = '';//Tasks.get($scope.selectedProject.slug, task.slug);
   };
 }
-
-// CombinedListCtrl.$inject = ['$scope', 'Projects', 'Tasks', 'Labels', 'Categories', 'Auth', '$location', '$defer'];
-
-
-
 
 
 function AuthCtrl($scope, Auth, $http) 

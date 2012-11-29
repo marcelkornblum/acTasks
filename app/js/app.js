@@ -1,15 +1,6 @@
 'use strict';
 
-/*
-// Declare app level module which depends on filters, and services
-angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives']).
-  config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: MyCtrl1});
-    $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: MyCtrl2});
-    $routeProvider.otherwise({redirectTo: '/view1'});
-  }]);
-*/
-angular.module('acTasks', ['acServices', 'acFilters', 'acDirectives', 'Auth']).
+angular.module('acTasks', ['acServices', 'acFilters', 'acDirectives', 'Auth', 'ui']).
   config(['$routeProvider', function($routeProvider) {
     $routeProvider.
         when('/login', {templateUrl: 'partials/login.html',   controller: AuthCtrl}).
@@ -21,23 +12,3 @@ angular.module('acTasks', ['acServices', 'acFilters', 'acDirectives', 'Auth']).
         // when('/projects/:projectSlug/tasks/:taskId', {templateUrl: 'partials/task-detail.html', controller: TaskDetailCtrl}).
         otherwise({redirectTo: '/login'});
     }]);
-  // .run ($rootScope, $location, User) ->
-  //   $rootScope.$on '$routeChangeStart', (event, next, current) ->
-  //       if not User.isAuthenticated() and next.templateUrl isnt '/partials/login.html'
-  //           $location.path("/login");
-/*
-function toggleHide(element)
-{
-  // alert ('called with ' + element);
-  var domElement = document.getElementById(element);
-  // alert ('found ' + domElement + ' with display = ' + domElement.style.display);
-  domElement.style.display = domElement.style.display === 'none' ? 'block' : 'none';
-  // alert ('and made display = ' + domElement.style.display);
-  return false;
-}
-
-function init(){
-    document.getElementById('projectFilterButton').onclick=function(){toggleHide('projectFilters');};
-}
-window.onload=init;
-*/

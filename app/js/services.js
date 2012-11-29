@@ -2,12 +2,6 @@
 
 /* Services */
 
-
-// Demonstrate how to register services
-// In this case it is a simple value service.
-//angular.module('myApp.services', []).
- // value('version', '0.1');
-
 var acServices = angular.module('acServices', ['ngResource']);
 
 function processAcList(Type) {
@@ -26,6 +20,13 @@ function processAcList(Type) {
         {
           data.label_id = data.label.id;
           data.label = data.label.name;
+        }
+
+        if (data.body)
+        {
+          var tmp = document.createElement("DIV");
+          tmp.innerHTML = data.body;
+          data.body =  tmp.textContent||tmp.innerText;
         }
 
         if (data.priority != undefined)
@@ -52,7 +53,7 @@ function processAcList(Type) {
 
         //mark as processed
         data.processed = true;
-        console.log(data);
+       // console.log(data);
 
       list.push(new Type(data));
     });
@@ -76,6 +77,23 @@ function processUsers(Type) {
       list.push(new Type(user));
     });
     return list;
+  }
+}
+
+function processUser(Type) {
+  return function(response) {
+    var user;
+    angular.forEach(response.data, function(data) {
+      user = response.data.logged_user;
+      user.role_id = data.role_id;
+      user.initials = user.first_name[0] + user.last_name[0];
+
+      var pieces = user.permalink.split('/');
+      user.slug = pieces[pieces.length - 1];
+      
+      user = new Type(user);
+    });
+    return user;
   }
 }
 
@@ -199,13 +217,19 @@ acServices.factory('People', function($http) {
       data[projectSlug] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/people&format=json&auth_api_token=' + localStorage.api_key).then(processUsers(People));
     }
     return data[projectSlug];
+  };
+  People.me = function() {
+    if (!data['me']) {
+      data['me'] = $http.get(localStorage.api_url + '?path_info=info&format=json&auth_api_token=' + localStorage.api_key).then(processUser(People));
+    }
+    return data['me'];
   }
   return People;
 });
 
 
 
-acServices.value('version', '0.1');
+acServices.value('version', '0.2');
 
 
 var Auth = angular.module('Auth', []);

@@ -53,11 +53,22 @@
 
             <p>{{selectedTask.body}}</p>
 
-            <ul class="nav nav-pills nav-stacked">
-              <li ng-repeat="comment in comments">
-               <p>{{comments.body}}</p>
-              </li>
-            </ul>
+            <div ng-bind-html-unsafe="selectedTask.body_formatted"></div>
+
+            <div class="accordion" id="accordionComments">
+              <div class="accordion-group" ng-repeat="comment in comments">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionComments" href="#collapse{{$index}}">
+                    Comment #{{$index + 1}} by {{comment.created_by.short_display_name}} on {{comment.created_on}}
+                  </a>
+                </div>
+                <div id="collapse{{$index}}" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <span ng-bind-html-unsafe="comment.body_formatted"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <hr />
             <form class="form-inline">

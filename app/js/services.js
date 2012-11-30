@@ -75,8 +75,8 @@ function processAcOne(Type) {
         var pieces = data.permalink.split('/');
         data.slug = pieces[pieces.length - 1];
 
-        data.created_on = data.created_on ? data.created_on.formatted_date : null;
-        data.updated_on = data.updated_on ? data.updated_on.formatted_date : null;
+        data.created_on = data.created_on ? data.created_on.formatted : null;
+        data.updated_on = data.updated_on ? data.updated_on.formatted : null;
 
         if (data.task_id)
         {
@@ -229,19 +229,28 @@ acServices.factory('Tasks', function($http) {
   var Tasks = function(data) {
       angular.copy(data, this);
     };
-  Tasks.query = function(projectSlug) {
+  Tasks.query = function(projectSlug, override) {
+    if (override = true) {
+      data[projectSlug] = false;
+    }
     if (!data[projectSlug]) {
       data[projectSlug] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks&format=json&auth_api_token=' + localStorage.api_key).then(processAcList(Tasks));
     }
     return data[projectSlug];
   }
-  Tasks.get = function(projectSlug, taskId) {
+  Tasks.get = function(projectSlug, taskId, override) {
+    if (override = true) {
+      data[projectSlug + '-' + taskId] = false;
+    }
     if(!data[projectSlug + '-' + taskId]) {
       data[projectSlug + '-' + taskId] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/' + taskId + '&format=json&auth_api_token=' + localStorage.api_key);//.then(processTasks(Tasks));
     }
     return data[projectSlug + '-' + taskId];
   }
-  Tasks.comments = function(projectSlug, taskId) {
+  Tasks.comments = function(projectSlug, taskId, override) {
+    if (override = true) {
+      data[projectSlug + '-' + taskId + '-comments'] = false;
+    }
     if(!data[projectSlug + '-' + taskId + '-comments']) {
       data[projectSlug + '-' + taskId + '-comments'] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/' + taskId + '/comments&format=json&auth_api_token=' + localStorage.api_key).then(processComments(Tasks, projectSlug, taskId));
     }
@@ -271,7 +280,7 @@ acServices.factory('Tasks', function($http) {
       method: 'POST',
       url: url,
       data: data,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}});//.then(processTasks(Tasks));
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}});//.then(acServices.Tasks.query(projectSlug, true));
 
     //return $http.post(url, data, {'headers': headers});//.then(processTasks(Tasks));
   }

@@ -39,7 +39,6 @@ function CombinedListCtrl($rootScope, $scope, Projects, Tasks, Labels, Categorie
   };
 
   $scope.selecttask = function(task) {
-    console.log(task.assignee_id);
     localStorage.selectedTaskId = task.id;
     $scope.selectedTask = task;
     $scope.task = Tasks.get($scope.selectedProject.slug, task.slug);
@@ -47,7 +46,6 @@ function CombinedListCtrl($rootScope, $scope, Projects, Tasks, Labels, Categorie
   };
 
   $scope.updatetask = function(task) {
-    console.log(task);
     Tasks.put($scope.selectedProject.slug, task);
   };
 

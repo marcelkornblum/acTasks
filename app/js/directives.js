@@ -100,6 +100,12 @@ angular.module('acDirectives', []).
 		    				break;
 		    			}
 		    		}
+		    		if (scope.assignee == undefined)
+		    		{
+		    			scope.assignee = Object();
+		    			scope.assignee.name = 'Not Assigned';
+		    			scope.assignee.initials = '--';
+		    		}
 	    			element.html('<a rel="tooltip" ng:click="changeassignee(task)" class="label label-inverse" title="Assignee: ' + scope.assignee.name + '">' + scope.assignee.initials + '</a>');
 	    		}
 	    		return newValue;

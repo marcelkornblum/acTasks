@@ -68,7 +68,9 @@ function processAcList(Type) {
 
 function processAcOne(Type) {
   return function(data) {
-      console.log(data);
+        if (data.data != undefined && data.permalink == undefined) {
+          data = data.data
+        }
         //get slug
         var pieces = data.permalink.split('/');
         data.slug = pieces[pieces.length - 1];
@@ -254,16 +256,24 @@ acServices.factory('Tasks', function($http) {
   Tasks.put = function(projectSlug, task) {
     var url = localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/' + task.id + '/edit&format=json&auth_api_token=' + localStorage.api_key;
     var data = 'submitted=submitted&';
+    var headers = 'Content-Type: application/x-www-form-urlencoded';
     for (var key in task) {
       if (key == 'body' || key == 'name' || key == 'priority' || key == 'assignee_id' || key == 'label_id' || key == 'category_id')
       {
-        var keyString = 'task[' + key + ']=' + encodeURIComponent(task[key]) + '&';
-        data = data + keyString;
+        data = data + 'task[' + key + ']=' + encodeURIComponent(task[key]) + '&';
       }
     }
-    data = 'submitted=submitted&task[name]=Adding%20resource%20on%20home%20page%3A%20won\'t%20reset%20after%20save';
+    console.log(url);
     console.log(data);
-    return $http.post(url, data);//.then(processTasks(Tasks));
+    console.log(headers);
+
+    return $http({
+      method: 'POST',
+      url: url,
+      data: data,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}});//.then(processTasks(Tasks));
+
+    //return $http.post(url, data, {'headers': headers});//.then(processTasks(Tasks));
   }
   return Tasks;
 });

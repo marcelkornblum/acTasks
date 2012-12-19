@@ -1,0 +1,15 @@
+Enter your ActiveCollab credentials below
+<div ng-controller="AuthCtrl">
+  <div auth />
+  <div class="option">
+  	<div><input placeholder="api_key" ng-model="newKey"></div>
+  </div>
+  <div class="option">
+    <div><input placeholder="email" ng-model="newEmail"></div>
+    <div><input type="password" placeholder="password" ng-model="newPassword"></div>
+  </div>
+  <div><input placeholder="api_url" ng-model="newUrl"></div>
+  <div><button ng-click="test()">Test</button></div>
+  <div><button ng-click="save()">Save Locally</button></div>
+  <div><button ng-click="login()">Login</button></div>
+</div>

@@ -2,8 +2,12 @@
 
 /* Controllers */
 
-function CombinedListCtrl($rootScope, $scope, Projects, Tasks, Labels, Categories, People, Auth, $location) 
+function CombinedListCtrl($rootScope, $scope, $location, Projects, Tasks, Labels, Categories, People, Auth) 
 {
+  if (!Auth.logged())
+  {
+    $location.path('/login');
+  }
   $scope.me = People.me();
   $scope.projects = Projects.query();
   $scope.projectlabels = Labels.query();
@@ -49,6 +53,10 @@ function CombinedListCtrl($rootScope, $scope, Projects, Tasks, Labels, Categorie
     Tasks.put($scope.selectedProject.slug, task);
   };
 
+  $scope.logout = function() {
+    Auth.logout()
+  };
+
 
   // Quick and dirty 'remember your place' functions
   $scope.$watch('projects', function(newValue, oldValue, scope) {
@@ -92,7 +100,6 @@ function AuthCtrl($scope, Auth, $http)
 
   //$scope.task = Auth.get({path: 'projects/' + $routeParams.projectSlug + '/tasks/' + $routeParams.taskId});
 }
-AuthCtrl.$inject = ['$scope', 'Auth', '$http'];
 
 
 

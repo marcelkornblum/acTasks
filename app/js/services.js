@@ -366,11 +366,18 @@ Auth.factory('Auth', function() {
     api_url: localStorage.api_url,
     api_key: localStorage.api_key,
     tested: localStorage.tested,
+    logged: function() {
+      if (localStorage.api_url != '' && localStorage.api_key != '')
+      {
+        return true;
+      }
+      return false;
+    },
     login: function(api_url, email, password) {
-      console.log(api_url)
-      console.log(email)
-      console.log(password)
-      console.log(Auth.client_name)
+      // console.log(api_url)
+      // console.log(email)
+      // console.log(password)
+      // console.log(Auth.client_name)
       // var params = {'api_subscription[email]': email, 'api_subscription[password]': password, 'api_subscription[client_name]': Auth.client_name, 'api_subscription[client_vendor]': Auth.client_vendor}
       // var keyString = api_url + '?api_subscription[email]=' + email + '&api_subscription[password]=' + password + '&api_subscription[client_name]=' + Auth.client_name + '&api_subscription[client_vendor]=' + Auth.client_vendor; 
       // var data = $http({method: 'POST', url: keyString});

@@ -8,71 +8,20 @@
   <title>ActiveCollab FastTask</title>
  <!--  <link rel="stylesheet" href="css/app.css"/> -->
   <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <style type="text/css">
-      body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-      }
-      .list {
-        padding: 9px 0;
-      }
-      .priority-TOP {
-        background-color: red;
-      }
-      .priority-HIGH {
-        background-color: orange;
-      }
-      .priority-LOW {
-        background-color: #7cbe7c;
-      }
-      .priority-BOTTOM {
-        background-color: green;
-      }
+  <link href="css/bootstrap-responsive.css" rel="stylesheet"> 
+  <link href="css/app.css" rel="stylesheet">
 
-      .task-details h3 {
-        margin-top:0;
-      }
-      .ac-icon {
-        background-image: url("img/activecollab.png");
-        width: 20px;
-        height: 16px;
-        display: inline-block;
-      }
-/*
-      [class^="icon-"],
-      [class*=" icon-"] {
-        background-image: url("img/actask-icons.png");
-      }
-      .icon-priority-TOP {
-        background-position: -22px -2px;
-      }
-      .icon-priority-HIGH {
-        background-position: -42px -2px;
-      }
-      .icon-priority-NONE {
-        background-position: -22px -20px;
-      }
-      .icon-priority-LOW {
-        background-position: -2px -1px;
-      }
-      .icon-priority-BOTTOM {
-        background-position: -2px -20px;
-      }
-*/
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet"> 
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+  <!-- Fav and touch icons -->
+  <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
 </head>
 <body>
 
@@ -86,12 +35,12 @@
       </a>
       <a class="brand" href="#">ActiveCollab FastTask</a>
       <div class="nav-collapse collapse">
-        <p class="navbar-text pull-right">
-          Logged in as <a href="#" class="navbar-link">Username</a>
+        <p class="navbar-text pull-right"  ng-show="me">
+          Logged in as <a href="{{me.permalink}}" class="navbar-link" target="_blank">{{me.name}}</a>
         </p>
         <ul class="nav pull-right">
-            <li><a href="#/logout">Logout</a></li>
-            <li><a href="#/login">Login</a></li>
+            <li><a href="#/logout" ng-show="me">Logout</a></li>
+            <li><a href="#/login" ng-hide="me">Login</a></li>
         </ul>
         <ul class="nav">
           <li class="active"><a href="#/combined">Tasks</a></li>
@@ -102,7 +51,6 @@
     </div>
   </div>
 </div>
-
 
 <ng-view />
 

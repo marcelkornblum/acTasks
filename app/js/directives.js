@@ -23,7 +23,7 @@ angular.module('acDirectives', []).
         restrict: 'E',
 	    replace: true,
 	    transclude: true,
-  		template: '<a  ng:click="selecttask(task)" class="name"><span class="task-icons"><task-priority-box task="task"></task-priority-box> <task-assignee-box task="task"></task-assignee-box> <task-label-box task="task"></span></task-label-box> {{task.name}} <task-category-box task="task"></task-category-box></a>'
+  		template: '<a  ng:click="selecttask(task)" class="name"><task-priority-box task="task"></task-priority-box> <task-label-box task="task"></task-label-box> <task-assignee-box task="task"></task-assignee-box> {{task.name}} <task-category-box task="task"></task-category-box></a>'
   	};
   }).
   directive('taskPriorityBox', function() {
@@ -52,7 +52,7 @@ angular.module('acDirectives', []).
 		    				break;
 		    			}
 		    		}
-	    			element.html('<a rel="tooltip" ng:click="changelabel(task)" class="label" title="Label: ' + scope.label.name + '" style="background-color: ' + scope.label.bg_color + '; color: ' + scope.label.fg_color + ';">' + scope.label.name + '</a>');
+	    			element.html('<a rel="tooltip" ng:click="changelabel(task)" class="label ac-label" title="Label: ' + scope.label.name + '" style="background-color: ' + scope.label.bg_color + '; color: ' + scope.label.fg_color + ';">' + scope.label.name + '</a>');
 	    		}
 	    		return newValue;
 	    	}, true);
@@ -106,7 +106,7 @@ angular.module('acDirectives', []).
 		    			scope.assignee.name = 'Not Assigned';
 		    			scope.assignee.initials = '--';
 		    		}
-	    			element.html('<a rel="tooltip" ng:click="changeassignee(task)" class="label label-inverse" title="Assignee: ' + scope.assignee.name + '">' + scope.assignee.initials + '</a>');
+	    			element.html('<a rel="tooltip" ng:click="changeassignee(task)" class="label label-inverse initials" title="Assignee: ' + scope.assignee.name + '">' + scope.assignee.initials + '</a>');
 	    		}
 	    		return newValue;
 	    	}, true);

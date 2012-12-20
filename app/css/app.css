@@ -35,13 +35,13 @@ body {
   text-shadow: none;
   font-size: 0.6em;
 }
-.task-icons {
-  display: block;
-  width: 12%;
-  overflow: none;
-  float: left;
-  clear: left;
-} 
-.task-icons a {
-  float:left;
+.initials {
+  width: 13px;
+  max-width: 13px;
+  text-align: center;
+}
+.ac-label {
+  width: 50px;
+  max-width: 50px;
+  text-align: center;
 }

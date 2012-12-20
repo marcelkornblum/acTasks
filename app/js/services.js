@@ -8,58 +8,7 @@ function processAcList(Type) {
   return function(response) {
     var list = [];
     angular.forEach(response.data, function(data) {
-      
-        //get slug
-        var pieces = data.permalink.split('/');
-        data.slug = pieces[pieces.length - 1];
-
-        data.created_on = data.created_on ? data.created_on.formatted_date : null;
-        data.updated_on = data.updated_on ? data.updated_on.formatted_date : null;
-
-        if (data.task_id)
-        {
-          data.id = data.task_id;
-        }
-
-        if (data.label)
-        {
-          data.label_id = data.label.id;
-          data.label = data.label.name;
-        }
-
-        if (data.body)
-        {
-          var tmp = document.createElement("DIV");
-          tmp.innerHTML = data.body;
-          data.body =  tmp.textContent||tmp.innerText;
-        }
-
-        if (data.priority != undefined)
-        {
-          switch (data.priority)
-          {
-            case 2:
-              data.priorityName = 'TOP';
-              break;
-            case 1:
-              data.priorityName = 'HIGH';
-              break;
-            case 0:
-              data.priorityName = 'NONE';
-              break;
-            case -1:
-              data.priorityName = 'LOW';
-              break;
-            case -2:
-              data.priorityName = 'BOTTOM';
-              break;
-          }
-        }
-
-        //mark as processed
-        data.processed = true;
-       // console.log(data);
-
+      data = processACUnit(data);
       list.push(new Type(data));
     });
     return list;
@@ -67,64 +16,77 @@ function processAcList(Type) {
 }
 
 function processAcOne(Type) {
-  return function(data) {
-        if (data.data != undefined && data.permalink == undefined) {
-          data = data.data
-        }
-        //get slug
-        var pieces = data.permalink.split('/');
-        data.slug = pieces[pieces.length - 1];
-
-        data.created_on = data.created_on ? data.created_on.formatted : null;
-        data.updated_on = data.updated_on ? data.updated_on.formatted : null;
-
-        if (data.task_id)
-        {
-          data.id = data.task_id;
-        }
-
-        if (data.label)
-        {
-          data.label_id = data.label.id;
-          data.label = data.label.name;
-        }
-
-        if (data.body)
-        {
-          var tmp = document.createElement("DIV");
-          tmp.innerHTML = data.body;
-          data.body =  tmp.textContent||tmp.innerText;
-        }
-
-        if (data.priority != undefined)
-        {
-          switch (data.priority)
-          {
-            case 2:
-              data.priorityName = 'TOP';
-              break;
-            case 1:
-              data.priorityName = 'HIGH';
-              break;
-            case 0:
-              data.priorityName = 'NONE';
-              break;
-            case -1:
-              data.priorityName = 'LOW';
-              break;
-            case -2:
-              data.priorityName = 'BOTTOM';
-              break;
-          }
-        }
-
-        //mark as processed
-        data.processed = true;
-       // console.log(data);
-
-      data = new Type(data);
-      return data;
+  return function(response) {
+    angular.forEach(response.data, function(data) {
+      return processACUnit(data);
+    });
   }
+}
+
+function processACUnit(data) {
+  if (data != undefined)
+  {
+    if (data.permalink != undefined) 
+    {
+      //get slug
+      var pieces = data.permalink.split('/');
+      data.slug = pieces[pieces.length - 1];
+
+      data.name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+    }
+
+    data.created_on = data.created_on ? data.created_on.formatted_date : null;
+    data.updated_on = data.updated_on ? data.updated_on.formatted_date : null;
+
+    if (data.task_id)
+    {
+      data.id = data.task_id;
+    }
+
+    if (data.label)
+    {
+      data.label_id = data.label.id;
+      data.label = data.label.name;
+    }
+
+    if (data.body)
+    {
+      if (!data.body_formatted)
+      {
+        data.body_formatted = data.body;
+      }
+      var tmp = document.createElement("DIV");
+      tmp.innerHTML = data.body;
+      data.body =  tmp.textContent||tmp.innerText;
+    }
+
+    if (data.priority != undefined)
+    {
+      switch (data.priority)
+      {
+        case 2:
+          data.priorityName = 'TOP';
+          break;
+        case 1:
+          data.priorityName = 'HIGH';
+          break;
+        case 0:
+          data.priorityName = 'NONE';
+          break;
+        case -1:
+          data.priorityName = 'LOW';
+          break;
+        case -2:
+          data.priorityName = 'BOTTOM';
+          break;
+      }
+    }
+
+    //mark as processed
+    data.processed = true;
+   console.log(data);
+}
+return data;
 }
 
 function processUsers(Type) {
@@ -143,6 +105,18 @@ function processUsers(Type) {
       list.push(new Type(user));
     });
     return list;
+  }
+}
+
+function saveAuthData(api_url, Auth) {
+  return function(response) {
+    var api_key = '';
+    if (response.data.substring(0, 8) == 'API key:')
+    {
+      api_key = response.data.substring(9, response.data.indexOf("\n"));
+      console.log(api_key);
+      Auth.save(api_url, api_key);
+    }
   }
 }
 
@@ -258,7 +232,7 @@ acServices.factory('Tasks', function($http) {
   }
   Tasks.getComment = function(projectSlug, taskId, commentId) {
     if(!data[projectSlug + '-' + taskId + '-comments-' + commentId]) {
-      data[projectSlug + '-' + taskId + '-comments-' + commentId] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/' + taskId + '/comments/'+ commentId + '&format=json&auth_api_token=' + localStorage.api_key).then(processAcOne(Tasks));
+      data[projectSlug + '-' + taskId + '-comments-' + commentId] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/' + taskId + '/comments/'+ commentId + '&format=json&auth_api_token=' + localStorage.api_key).then(processAcList(Tasks));
     }
     return data[projectSlug + '-' + taskId + '-comments-' + commentId];
   }
@@ -366,39 +340,29 @@ Auth.factory('Auth', function() {
     api_url: localStorage.api_url,
     api_key: localStorage.api_key,
     tested: localStorage.tested,
+    client_name: 'AC FastTasks',
+    client_vendor: 'Marcel Kornblum',
     logged: function() {
-      if (localStorage.api_url != '' && localStorage.api_key != '')
+      if (localStorage.api_key != undefined && localStorage.api_key != '')
       {
         return true;
       }
       return false;
     },
-    login: function(api_url, email, password) {
-      // console.log(api_url)
-      // console.log(email)
-      // console.log(password)
-      // console.log(Auth.client_name)
-      // var params = {'api_subscription[email]': email, 'api_subscription[password]': password, 'api_subscription[client_name]': Auth.client_name, 'api_subscription[client_vendor]': Auth.client_vendor}
-      // var keyString = api_url + '?api_subscription[email]=' + email + '&api_subscription[password]=' + password + '&api_subscription[client_name]=' + Auth.client_name + '&api_subscription[client_vendor]=' + Auth.client_vendor; 
-      // var data = $http({method: 'POST', url: keyString});
-      jQuery.ajax({
-        url: api_url,
-        data: "api_subscription[email]=" + email + "&api_subscription[password]=" + password + "&api_subscription[client_name]=" + Auth.client_name + "&api_subscription[client_vendor]=" + Auth.client_vendor,
-        type: "POST"})
-      console.log(data);
+    login: function(email, password, api_url, $http) {
+      var config = {'headers': {'Content-Type': 'application/x-www-form-urlencoded'}};
+      var data = "api_subscription[email]=" + email + "&api_subscription[password]=" + password + "&api_subscription[client_name]=" + Auth.client_name + "&api_subscription[client_vendor]=" + Auth.client_vendor;
+        
+      $http.post(api_url, data, config).then(saveAuthData(api_url, Auth, $http), Auth.error(api_url));
     },
-    save: function(api_url, api_key) {
-      if (localStorage.tested)
-      {
-        localStorage.api_url = api_url
-        localStorage.api_key = api_key
-      }
-      else
-      {
-        localStorage.removeItem('api_url')
-        localStorage.removeItem('api_key')
-        alert('API URL/Key pair untested - test and try again');
-      }
+    save: function(api_url, api_key, $http) {
+      localStorage.api_url = api_url;
+      localStorage.api_key = api_key;
+      // Auth.test(api_url, api_key, $http);
+      $location.path('/combined');
+    },
+    error: function(api_url, api_key) {
+      //
     },
     logout: function() {
       localStorage.removeItem('api_url')

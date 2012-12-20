@@ -1,30 +1,47 @@
 
-      body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-      }
-      .list {
-        padding: 9px 0;
-      }
-      .priority-TOP {
-        background-color: red;
-      }
-      .priority-HIGH {
-        background-color: orange;
-      }
-      .priority-LOW {
-        background-color: #7cbe7c;
-      }
-      .priority-BOTTOM {
-        background-color: green;
-      }
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+.list {
+  padding: 9px 0;
+}
+.priority-TOP {
+  background-color: red;
+}
+.priority-HIGH {
+  background-color: orange;
+}
+.priority-NONE {
+  background-color: #ddd;
+}
+.priority-LOW {
+  background-color: #7cbe7c;
+}
+.priority-BOTTOM {
+  background-color: green;
+}
 
-      .task-details h3 {
-        margin-top:0;
-      }
-      .ac-icon {
-        background-image: url("img/activecollab.png");
-        width: 20px;
-        height: 16px;
-        display: inline-block;
-      }
+.task-details h3 {
+  margin-top:0;
+}
+.ac-icon {
+  background-image: url("img/activecollab.png");
+  width: 20px;
+  height: 16px;
+  display: inline-block;
+}
+.label {
+  text-shadow: none;
+  font-size: 0.6em;
+}
+.task-icons {
+  display: block;
+  width: 12%;
+  overflow: none;
+  float: left;
+  clear: left;
+} 
+.task-icons a {
+  float:left;
+}

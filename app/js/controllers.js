@@ -2,20 +2,33 @@
 
 /* Controllers */
 
-function CombinedListCtrl($rootScope, $scope, $location, Projects, Tasks, Labels, Categories, People, Auth) 
+function HeaderCtrl($scope, $location, Auth, People)
 {
   if (!Auth.logged())
   {
     $location.path('/login');
   }
+  else
+  {
+    $location.path('/combined');
+  }
   $scope.me = People.me();
+
+  $scope.logout = function() {
+    Auth.logout();
+    $location.path('/login');
+  };
+}
+
+function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, People) 
+{
   $scope.projects = Projects.query();
   $scope.projectlabels = Labels.query();
   $scope.projectcategories = Categories.query();
 
   $scope.projectQuery = '';
   $scope.selectedProjectLabel = '';
-  $rootScope.selectedProjectCategory = '';
+  $scope.selectedProjectCategory = '';
   $scope.projectOrder = 'name';
 
   $scope.tasks = Array(); 
@@ -51,10 +64,6 @@ function CombinedListCtrl($rootScope, $scope, $location, Projects, Tasks, Labels
 
   $scope.updatetask = function(task) {
     Tasks.put($scope.selectedProject.slug, task);
-  };
-
-  $scope.logout = function() {
-    Auth.logout()
   };
 
 
@@ -95,7 +104,8 @@ function AuthCtrl($scope, Auth, $http)
     Auth.test($scope.newUrl, $scope.newKey, $http)
   }
   $scope.login = function() {
-    Auth.test($scope.newEmail, $scope.password, $http)
+    var url = 'http://' + $scope.newUrl + '/api.php'
+    Auth.login($scope.newEmail, $scope.newPassword, url, $http)
   }
 
   //$scope.task = Auth.get({path: 'projects/' + $routeParams.projectSlug + '/tasks/' + $routeParams.taskId});

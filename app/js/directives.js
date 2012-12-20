@@ -23,7 +23,7 @@ angular.module('acDirectives', []).
         restrict: 'E',
 	    replace: true,
 	    transclude: true,
-  		template: '<a ng:click="selecttask(task)" class="name"><task-priority-box task="task"></task-priority-box> <task-assignee-box task="task"></task-assignee-box> {{task.name}} <task-label-box task="task"></task-label-box> <task-category-box task="task"></task-category-box></a>'
+  		template: '<a  ng:click="selecttask(task)" class="name"><span class="task-icons"><task-priority-box task="task"></task-priority-box> <task-assignee-box task="task"></task-assignee-box> <task-label-box task="task"></span></task-label-box> {{task.name}} <task-category-box task="task"></task-category-box></a>'
   	};
   }).
   directive('taskPriorityBox', function() {
@@ -52,7 +52,7 @@ angular.module('acDirectives', []).
 		    				break;
 		    			}
 		    		}
-	    			element.html('<a rel="tooltip" ng:click="changelabel(task)" class="label pull-right" title="Label: ' + scope.label.name + '" style="background-color: ' + scope.label.bg_color + '; color: ' + scope.label.fg_color + ';">' + scope.label.name + '</a>');
+	    			element.html('<a rel="tooltip" ng:click="changelabel(task)" class="label" title="Label: ' + scope.label.name + '" style="background-color: ' + scope.label.bg_color + '; color: ' + scope.label.fg_color + ';">' + scope.label.name + '</a>');
 	    		}
 	    		return newValue;
 	    	}, true);
@@ -76,7 +76,7 @@ angular.module('acDirectives', []).
 		    				break;
 		    			}
 		    		}
-	    			element.html('<a rel="tooltip" ng:click="changecategory(task)" class="label" title="Category: ' + scope.category.name + '">' + scope.category.name + '</a>');
+	    			element.html('<a rel="tooltip" ng:click="changecategory(task)" class="label pull-right" title="Category: ' + scope.category.name + '">' + scope.category.name + '</a>');
 	    		}
 	    		return newValue;
 	    	}, true);

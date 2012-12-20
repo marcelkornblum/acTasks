@@ -1,15 +1,38 @@
 Enter your ActiveCollab credentials below
-<div ng-controller="AuthCtrl">
+<form ng-controller="AuthCtrl" class="form-horizontal">
   <div auth />
-  <div class="option">
-  	<div><input placeholder="api_key" ng-model="newKey"></div>
+
+  <div class="control-group">
+    <label class="control-label" for="inputEmail">Email</label>
+    <div class="controls">
+      <input type="text" id="inputEmail" placeholder="Email" ng-model="newEmail">
+      <span class="help-inline">This is the email you use to sign in to ActiveCollab</span>
+    </div>
   </div>
-  <div class="option">
-    <div><input placeholder="email" ng-model="newEmail"></div>
-    <div><input type="password" placeholder="password" ng-model="newPassword"></div>
+  <div class="control-group">
+    <label class="control-label" for="inputPassword">Password</label>
+    <div class="controls">
+      <input type="password" id="inputPassword" placeholder="Password" ng-model="newPassword">
+      <span class="help-inline">Your ActiveCollab password</span>
+    </div>
   </div>
-  <div><input placeholder="api_url" ng-model="newUrl"></div>
-  <div><button ng-click="test()">Test</button></div>
-  <div><button ng-click="save()">Save Locally</button></div>
-  <div><button ng-click="login()">Login</button></div>
-</div>
+  <div class="control-group">
+    <label class="control-label" for="inputPassword">Domain</label>
+    <div class="controls">
+      <input type="text" id="inputPassword" placeholder="Domain" ng-model="newUrl">
+      <span class="help-inline">This is the URL of your ActiveCollab installation</span>
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputPassword">API Key</label>
+    <div class="controls">
+      <input type="text" id="inputPassword" placeholder="API Key" ng-model="newKey"  disabled>
+      <span class="help-inline">This is how we connect to ActiveCollab - we'll grab it for you and save it locally</span>
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <button type="submit" class="btn" ng-click="login()">Sign in</button>
+    </div>
+  </div>
+</form>

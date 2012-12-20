@@ -51,8 +51,7 @@
           <div class="well task-details" ng-show="selectedTask">
             <button class="close pull-right" ng-click="selectedTask=''">&times;</button>
             <h3>{{selectedTask.name}}</h3>
-
-            <p>{{selectedTask.body}}</p>
+            <task-priority-box task="{{selectedTask}}"></task-priority-box> <task-assignee-box task="{{selectedTask}}"></task-assignee-box> <task-label-box task="{{selectedTask}}"></task-label-box> <task-category-box task="{{selectedTask}}"></task-category-box>
 
             <div ng-bind-html-unsafe="selectedTask.body_formatted"></div>
 
@@ -96,10 +95,10 @@
                 <select ng-model="selectedTask.category_id" ng-options="n.id as n.name for n in taskcategories" class="input-small"></select>
               </div>
             </form>
-            <div class="btn-toolbar pull-right">
+           <!--  <div class="btn-toolbar pull-right">
               <button class="btn" ng-click="selectedTask=''">Close</button>
               <button class="btn btn-primary" ng-click="updatetask(selectedTask)">Update</button>
-            </div>
+            </div> -->
 
             <div class="clearfix"></div>
           </div>

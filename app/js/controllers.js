@@ -88,11 +88,6 @@ function CombinedListCtrl($rootScope, $scope, Projects, Tasks, Labels, Categorie
       });
     }
   });
-  $scope.$watch('comments', function(newValue, oldValue, scope) {
-    angular.forEach(scope.comments.$$v, function(comment) {
-      console.log(comment)
-    });
-  });
 }
 
 

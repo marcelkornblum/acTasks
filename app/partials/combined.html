@@ -51,7 +51,7 @@
           <div class="well task-details" ng-show="selectedTask">
             <button class="close pull-right" ng-click="selectedTask=''">&times;</button>
             <h3>{{selectedTask.name}}</h3>
-            <task-priority-box task="{{selectedTask}}"></task-priority-box> <task-assignee-box task="{{selectedTask}}"></task-assignee-box> <task-label-box task="{{selectedTask}}"></task-label-box> <task-category-box task="{{selectedTask}}"></task-category-box>
+            <task-priority-box task="selectedTask"></task-priority-box> <task-assignee-box task="selectedTask"></task-assignee-box> <task-label-box task="selectedTask"></task-label-box> <task-category-box task="selectedTask"></task-category-box>
 
             <div ng-bind-html-unsafe="selectedTask.body_formatted"></div>
 

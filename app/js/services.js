@@ -17,9 +17,10 @@ function processAcList(Type) {
 
 function processAcOne(Type) {
   return function(response) {
-    angular.forEach(response.data, function(data) {
-      return processACUnit(data);
-    });
+    // angular.forEach(response.data, function(data) {
+      console.log(processACUnit(response.data));
+      return processACUnit(response.data);
+    // });
   }
 }
 
@@ -35,8 +36,14 @@ function processACUnit(data) {
       data.name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
     }
 
-    data.created_on = data.created_on ? data.created_on.formatted_date : null;
-    data.updated_on = data.updated_on ? data.updated_on.formatted_date : null;
+    if (data.created_on != undefined)
+    {
+      data.created_on = data.created_on.formatted_date ? data.created_on.formatted_date : data.created_on;
+    }
+    if (data.updated_on != undefined)
+    {
+      data.updated_on = data.updated_on.formatted_date ? data.updated_on.formatted_date : data.updated_on;
+    }
 
     if (data.task_id)
     {
@@ -84,7 +91,7 @@ function processACUnit(data) {
 
     //mark as processed
     data.processed = true;
-   console.log(data);
+   // console.log(data);
 }
 return data;
 }
@@ -161,11 +168,13 @@ function processComments(Type, projectSlug, taskId) {
   return function(response) {
     var list = Array();
     angular.forEach(response.data, function(data) {
+      // console.log(data);
       if (data && data.id != undefined){
         var item = Type.getComment(projectSlug, taskId, data.id);
         list.push(item);
       }
     });
+    // console.log(list);
     return list;
   }
 }
@@ -232,7 +241,7 @@ acServices.factory('Tasks', function($http) {
   }
   Tasks.getComment = function(projectSlug, taskId, commentId) {
     if(!data[projectSlug + '-' + taskId + '-comments-' + commentId]) {
-      data[projectSlug + '-' + taskId + '-comments-' + commentId] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/' + taskId + '/comments/'+ commentId + '&format=json&auth_api_token=' + localStorage.api_key).then(processAcList(Tasks));
+      data[projectSlug + '-' + taskId + '-comments-' + commentId] = $http.get(localStorage.api_url + '?path_info=projects/' + projectSlug + '/tasks/' + taskId + '/comments/'+ commentId + '&format=json&auth_api_token=' + localStorage.api_key).then(processAcOne(Tasks));
     }
     return data[projectSlug + '-' + taskId + '-comments-' + commentId];
   }

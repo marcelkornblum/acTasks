@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-function HeaderCtrl($scope, $location, Auth, People)
+function HeaderCtrl($rootScope, $scope, $location, Auth, People)
 {
   if (!Auth.logged())
   {
@@ -12,7 +12,7 @@ function HeaderCtrl($scope, $location, Auth, People)
   {
     $location.path('/combined');
   }
-  $scope.me = People.me();
+  $rootScope.me = People.me();
 
   $scope.logout = function() {
     Auth.logout();
@@ -20,7 +20,7 @@ function HeaderCtrl($scope, $location, Auth, People)
   };
 }
 
-function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, People) 
+function CombinedListCtrl($rootScope, $scope, Projects, Tasks, Labels, Categories, People) 
 {
   $scope.projects = Projects.query();
   $scope.projectlabels = Labels.query();
@@ -49,7 +49,7 @@ function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, People)
     $scope.selectedTaskPriority = '';
     $scope.selectedTaskComplete = 0;
     $scope.selectedTaskArchived = 0;
-    $scope.selectedTaskAssignee = $scope.me.id;
+    $scope.selectedTaskAssignee = $rootScope.me.id;
     //console.log($scope.me);
     $scope.taskOrder = 'priority';
     $scope.taskReverse = true;
@@ -87,6 +87,11 @@ function CombinedListCtrl($scope, Projects, Tasks, Labels, Categories, People)
         }
       });
     }
+  });
+  $scope.$watch('comments', function(newValue, oldValue, scope) {
+    angular.forEach(scope.comments.$$v, function(comment) {
+      console.log(comment)
+    });
   });
 }
 
